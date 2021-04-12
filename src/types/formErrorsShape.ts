@@ -1,3 +1,3 @@
 export type FormErrorsShape = {
-  [key: string]: string;
+  [key: string]: any;
 };
