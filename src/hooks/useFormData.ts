@@ -21,7 +21,5 @@ export const useFormData = <T, E>(initial: T, errors?: E): ReturnType<T, E> => {
     setDirty(true);
   }, [setFormValue, setFormErrors, setDirty, formValue, formErrors]);
 
-  console.log(`useFormData: value = ${JSON.stringify(formValue)}`);
-
   return { formValue, formErrors, onChange, isDirty, isValid };
 };
