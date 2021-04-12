@@ -1,3 +1,3 @@
 export * from './components';
 export * from './hooks';
-export { FormInputProps, FormFieldProps } from './types';
+export { FormInputProps, FormFieldProps, FormValuesShape, FormErrorsShape } from './types';
