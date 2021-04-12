@@ -24,6 +24,7 @@ export const Field = React.memo((props: FieldProps) => {
     {(context) => {
       const { value, errors, onChange, components, field: Field } = context;
       const FormInput = component || components[type || ''];
+      const safeErrors = errors || {};
 
       if (Object.keys(value).indexOf(name) === -1) {
         throw new Error(`Field name "${name}" doesn't present in form value object.`);
@@ -31,14 +32,14 @@ export const Field = React.memo((props: FieldProps) => {
 
       const onFormInputChange = (v: any, e?: string) => {
         const validatorError = validator ? validator(v, value) : undefined;
-        onChange({ ...value, [name]: v }, { ...errors, [name]: e || validatorError });
+        onChange({ ...value, [name]: v }, { ...safeErrors, [name]: e || validatorError });
       };
 
-      return (<Field required={required} error={errors[name]} label={label}>
+      return (<Field required={required} error={safeErrors[name]} label={label}>
         <FormInput
           {...inputProps}
           value={value[name]}
-          error={(errors || {})[name]}
+          error={safeErrors[name]}
           onChange={onFormInputChange}
           debounced={debounced}
           required={required}
