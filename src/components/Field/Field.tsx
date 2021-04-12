@@ -15,36 +15,32 @@ export interface FieldProps {
 
 export const Field = React.memo((props: FieldProps) => {
   const { name, type, component, debounced, required, label, inputProps, validator } = props;
+  const context = React.useContext(BriefFormContext);
+  const { value, errors, onChange, components, field: Field } = context;
+  const FormInput = component || components[type || ''];
+  const safeErrors = errors || {};
+
+  if (Object.keys(value).indexOf(name) === -1) {
+    throw new Error(`Field name "${name}" doesn't present in form value object.`);
+  }
+
+  const onFormInputChange = (v: any, e?: string) => {
+    const validatorError = validator ? validator(v, value) : undefined;
+    onChange({ ...value, [name]: v }, { ...safeErrors, [name]: e || validatorError });
+  };
 
   if (!type && !component) {
     throw new Error('Either "type" or "component" props should be passed to render proper form input control.');
   }
 
-  return (<BriefFormContext.Consumer>
-    {(context) => {
-      const { value, errors, onChange, components, field: Field } = context;
-      const FormInput = component || components[type || ''];
-      const safeErrors = errors || {};
-
-      if (Object.keys(value).indexOf(name) === -1) {
-        throw new Error(`Field name "${name}" doesn't present in form value object.`);
-      }
-
-      const onFormInputChange = (v: any, e?: string) => {
-        const validatorError = validator ? validator(v, value) : undefined;
-        onChange({ ...value, [name]: v }, { ...safeErrors, [name]: e || validatorError });
-      };
-
-      return (<Field required={required} error={safeErrors[name]} label={label}>
-        <FormInput
-          {...inputProps}
-          value={value[name]}
-          error={safeErrors[name]}
-          onChange={onFormInputChange}
-          debounced={debounced}
-          required={required}
-        />
-      </Field>);
-    }}
-  </BriefFormContext.Consumer>);
+  return (<Field required={required} error={safeErrors[name]} label={label}>
+    <FormInput
+      {...inputProps}
+      value={value[name]}
+      error={safeErrors[name]}
+      onChange={onFormInputChange}
+      debounced={debounced}
+      required={required}
+    />
+  </Field>);
 });

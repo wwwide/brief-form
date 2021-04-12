@@ -63,7 +63,6 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
         name="age"
         label="Age"
         type="input"
-        inputProps={{}}
       />
     </BriefForm>
   </div>);
