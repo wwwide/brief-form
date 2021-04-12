@@ -38,7 +38,7 @@ export const Field = React.memo((props: FieldProps) => {
         <FormInput
           {...inputProps}
           value={value[name]}
-          error={errors[name]}
+          error={(errors || {})[name]}
           onChange={onFormInputChange}
           debounced={debounced}
           required={required}
