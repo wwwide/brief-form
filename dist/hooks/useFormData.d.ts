@@ -1,10 +1,9 @@
-import { FormValuesShape, FormErrorsShape } from '../types';
-declare type ReturnType = {
-    formValue: FormValuesShape;
-    formErrors: FormErrorsShape;
-    onChange: (value: FormValuesShape, errors: FormErrorsShape) => void;
+declare type ReturnType<T, E> = {
+    formValue: T;
+    formErrors: E;
+    onChange: (value: T, errors: E) => void;
     isDirty: boolean;
     isValid: boolean;
 };
-export declare const useFormData: (initial: FormValuesShape, errors: FormErrorsShape) => ReturnType;
+export declare const useFormData: <T, E>(initial: T, errors?: E | undefined) => ReturnType<T, E>;
 export {};
