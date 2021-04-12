@@ -16,10 +16,10 @@ export const useFormData = <T, E>(initial: T, errors?: E): ReturnType<T, E> => {
   const isValid = !Object.keys(formErrors || {}).length;
 
   const onChange = React.useCallback((value: T, errors: E) => {
-    setFormValue(value);
-    setFormErrors(errors);
+    setFormValue({ ...formValue, ...value });
+    setFormErrors({ ...formErrors, ...errors });
     setDirty(true);
-  }, [setFormValue, setFormErrors, setDirty]);
+  }, [setFormValue, setFormErrors, setDirty, formValue, formErrors]);
 
   return { formValue, formErrors, onChange, isDirty, isValid };
 };
