@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormInputProps } from '../../types';
+import { FormInputProps, FormValuesShape } from '../../types';
 export interface FieldProps {
     name: string;
     type?: string;
@@ -7,6 +7,7 @@ export interface FieldProps {
     component?: React.ComponentType<FormInputProps>;
     debounced?: boolean;
     required?: boolean;
+    validator?: (v: any, f: FormValuesShape) => string | undefined;
     inputProps?: {
         [key: string]: any;
     };

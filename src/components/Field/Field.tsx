@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { BriefFormContext } from '../../context';
-import { FormInputProps } from '../../types';
+import { FormInputProps, FormValuesShape } from '../../types';
 
 export interface FieldProps {
   name: string;
@@ -9,11 +9,12 @@ export interface FieldProps {
   component?: React.ComponentType<FormInputProps>;
   debounced?: boolean;
   required?: boolean;
+  validator?: (v: any, f: FormValuesShape) => string | undefined;
   inputProps?: { [key: string]: any };
 }
 
 export const Field = React.memo((props: FieldProps) => {
-  const { name, type, component, debounced, required, label, inputProps } = props;
+  const { name, type, component, debounced, required, label, inputProps, validator } = props;
 
   if (!type && !component) {
     throw new Error('Either "type" or "component" props should be passed to render proper form input control.');
@@ -29,7 +30,8 @@ export const Field = React.memo((props: FieldProps) => {
       }
 
       const onFormInputChange = (v: any, e?: string) => {
-        onChange({ ...value, [name]: v }, { ...errors, [name]: e });
+        const validatorError = validator ? validator(v, value) : undefined;
+        onChange({ ...value, [name]: v }, { ...errors, [name]: e || validatorError });
       };
 
       return (<Field required={required} error={errors[name]} label={label}>

@@ -53,8 +53,10 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
         label="Name"
         type="input"
         inputProps={{
+          autoFocus: true,
           style: { border: '3px solid red' }
         }}
+        validator={(v, f) => v.length < 3 ? 'Name too short' : undefined}
       />
       <Field
         required
