@@ -14,18 +14,8 @@ module.exports = (env, argv) => {
     },
     devtool: 'source-map',
     externals: {
-      react: {
-        root: 'React',
-        commonjs2: 'react',
-        commonjs: 'react',
-        amd: 'react'
-      },
-      'react-dom': {
-        root: 'ReactDOM',
-        commonjs2: 'react-dom',
-        commonjs: 'react-dom',
-        amd: 'react-dom'
-      },
+      "react": "commonjs react",
+      "react-dom": "commonjs react-dom",
     },
     module: {
       rules: [
