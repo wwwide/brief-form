@@ -20,13 +20,16 @@ export const Field = React.memo((props: FieldProps) => {
   const FormInput = component || components[type || ''];
   const safeErrors = errors || {};
 
+  console.log(`Field: [${name}], form value: ${value}`);
+
   if (Object.keys(value).indexOf(name) === -1) {
     throw new Error(`Field name "${name}" doesn't present in form value object.`);
   }
 
   const onFormInputChange = (v: any, e?: string) => {
+    console.log(`OnChange: [${name}], value: ${v}, form: ${value}`);
     const validatorError = validator ? validator(v, value) : undefined;
-    onChange({ [name]: v }, { [name]: e || validatorError });
+    onChange({ ...value, [name]: v }, { ...safeErrors, [name]: e || validatorError });
   };
 
   if (!type && !component) {
