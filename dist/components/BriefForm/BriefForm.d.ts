@@ -8,6 +8,9 @@ export interface BriefFormProps {
         [key: string]: React.ComponentType<FormInputProps>;
     };
     field: React.ComponentType<FormFieldProps>;
+    registeredFields: React.RefObject<{
+        [key: string]: any;
+    }>;
     children: any;
 }
 export declare const BriefForm: React.MemoExoticComponent<(props: BriefFormProps) => JSX.Element>;

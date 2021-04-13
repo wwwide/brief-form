@@ -8,13 +8,14 @@ export interface BriefFormProps {
   onChange: (value: FormValuesShape, errors: FormErrorsShape) => void;
   components: { [key: string]: React.ComponentType<FormInputProps> };
   field: React.ComponentType<FormFieldProps>;
+  registeredFields: React.RefObject<{ [key: string]: any }>;
   children: any;
 }
 
 export const BriefForm = React.memo((props: BriefFormProps) => {
-  const { value, errors, children, onChange, components, field } = props;
+  const { value, errors, children, onChange, components, field, registeredFields } = props;
 
-  return (<BriefFormContext.Provider value={{ value, errors, onChange, components, field }}>
+  return (<BriefFormContext.Provider value={{ value, errors, onChange, components, field, registeredFields }}>
     {children}
   </BriefFormContext.Provider>);
 });

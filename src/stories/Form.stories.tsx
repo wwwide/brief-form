@@ -20,20 +20,31 @@ const FieldRenderer = React.memo((props: FormFieldProps) => {
 });
 
 const Input = (props: FormInputProps) => {
-  const { value, error, onChange, ...rest } = props;
+  const { value, error, onChange, required, ...rest } = props;
   return (<input
     {...rest}
+    required={required}
     value={value}
-    onChange={(e) => onChange(e.target.value, undefined)}
+    onChange={(e) => onChange(e.target.value, Input.getError(e.target.value, required))}
   />);
 };
+
+Input.getError = (v: any, required?: boolean) => !required || !!v ? undefined : 'Required';
 
 const components = {
   'input': Input,
 };
 
 export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) => {
-  const { formValue, formErrors, onChange } = useFormData(props.value, props.errors);
+  const {
+    formValue,
+    formErrors,
+    onChange,
+    registeredFields,
+    validate,
+    isValid,
+    isDirty,
+  } = useFormData(props.value, props.errors);
 
   const onChangeWrapper = React.useCallback((v, e) => {
     onChange(v, { ...e, age: v.name === 'Andrey' ? undefined : 'Old guy' });
@@ -46,6 +57,7 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
       onChange={onChangeWrapper}
       components={components}
       field={FieldRenderer}
+      registeredFields={registeredFields}
     >
       <Field
         required
@@ -54,7 +66,6 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
         type="input"
         inputProps={{
           autoFocus: true,
-          style: { border: '3px solid red' }
         }}
         validator={(v, f) => v.length < 3 ? 'Name too short' : undefined}
       />
@@ -64,14 +75,16 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
         label="Age"
         type="input"
       />
+      <button onClick={() => { console.log(validate(true)); }}>Validate!</button>
+      <button disabled={!isValid || !isDirty}>Submit!</button>
     </BriefForm>
   </div>);
 };
 
 BriefFormSample.args = {
   value: {
-    name: 'Andrey',
-    age: '35',
+    name: '',
+    age: '',
   },
   errors: {
     name: 'Unknown error!'

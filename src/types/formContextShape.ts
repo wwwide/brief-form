@@ -10,4 +10,5 @@ export type FormContextShape = {
   onChange: (value: FormValuesShape, errors: FormErrorsShape) => void;
   components: { [key: string]: React.ComponentType<FormInputProps> };
   field: React.ComponentType<FormFieldProps>;
+  registeredFields: React.RefObject<{ [key: string]: any }>;
 }

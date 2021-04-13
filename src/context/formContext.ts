@@ -7,4 +7,5 @@ export const BriefFormContext = React.createContext<FormContextShape>({
   components: {},
   field: () => { return null; },
   onChange: () => { return; },
+  registeredFields: React.createRef(),
 });

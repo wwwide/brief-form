@@ -15,4 +15,7 @@ export declare type FormContextShape = {
         [key: string]: React.ComponentType<FormInputProps>;
     };
     field: React.ComponentType<FormFieldProps>;
+    registeredFields: React.RefObject<{
+        [key: string]: any;
+    }>;
 };

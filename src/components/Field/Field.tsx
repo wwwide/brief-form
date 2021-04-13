@@ -16,9 +16,28 @@ export interface FieldProps {
 export const Field = React.memo((props: FieldProps) => {
   const { name, type, component, debounced, required, label, inputProps, validator } = props;
   const context = React.useContext(BriefFormContext);
-  const { value, errors, onChange, components, field: Field } = context;
+  const { value, errors, onChange, components, field: Field, registeredFields } = context;
   const FormInput = component || components[type || ''];
   const safeErrors = errors || {};
+
+  React.useEffect(() => {
+    if (registeredFields?.current) {
+      if (!registeredFields.current[name]) {
+        registeredFields.current[name] = {
+          name,
+          required,
+          validator,
+          getError: (FormInput as any).getError,
+        };
+      }
+    }
+
+    return () => {
+      if (registeredFields?.current) {
+        delete registeredFields.current[name];
+      }
+    }
+  }, [name, validator, required, FormInput]);
 
   if (Object.keys(value).indexOf(name) === -1) {
     throw new Error(`Field name "${name}" doesn't present in form value object.`);
@@ -31,6 +50,14 @@ export const Field = React.memo((props: FieldProps) => {
 
   if (!type && !component) {
     throw new Error('Either "type" or "component" props should be passed to render proper form input control.');
+  }
+
+  if (!FormInput) {
+    throw new Error(`Cannot instantiate form input component for field "${name}"`);
+  }
+
+  if (!(FormInput as any).getError) {
+    throw new Error('Field input component should implement static method "isValid".');
   }
 
   return (<Field required={required} error={safeErrors[name]} label={label}>
