@@ -27,7 +27,6 @@ export const Field = React.memo((props: FieldProps) => {
           name,
           required,
           validator,
-          getError: (FormInput as any).getError,
         };
       }
     }
@@ -54,10 +53,6 @@ export const Field = React.memo((props: FieldProps) => {
 
   if (!FormInput) {
     throw new Error(`Cannot instantiate form input component for field "${name}"`);
-  }
-
-  if (!(FormInput as any).getError) {
-    throw new Error('Field input component should implement static method "isValid".');
   }
 
   return (<Field required={required} error={safeErrors[name]} label={label}>

@@ -30,7 +30,9 @@ export const useFormData = <T, E>(initial: T, errors?: E): ReturnType<T, E> => {
       Object.keys(registeredFields.current).forEach((key) => {
         const meta = registeredFields.current[key];
         const fieldValue = (formValue as any)[key];
-        const inputError = meta.getError(fieldValue, meta.required);
+        const inputError = meta.required && (fieldValue === '' || fieldValue === null || fieldValue === undefined)
+          ? 'Required'
+          : undefined;
         const validatorError = meta.validator ? meta.validator(fieldValue, formValue) : undefined;
         const error = validatorError || inputError;
 

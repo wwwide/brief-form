@@ -25,11 +25,9 @@ const Input = (props: FormInputProps) => {
     {...rest}
     required={required}
     value={value}
-    onChange={(e) => onChange(e.target.value, Input.getError(e.target.value, required))}
+    onChange={(e) => onChange(e.target.value, undefined)}
   />);
 };
-
-Input.getError = (v: any, required?: boolean) => !required || !!v ? undefined : 'Required';
 
 const components = {
   'input': Input,
