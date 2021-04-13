@@ -34,7 +34,7 @@ export const useFormData = <T, E>(initial: T, errors?: E): ReturnType<T, E> => {
           ? 'Required'
           : undefined;
         const validatorError = meta.validator ? meta.validator(fieldValue, formValue) : undefined;
-        const error = validatorError || inputError;
+        const error = validatorError || inputError || formErrors[key];
 
         if (error) {
           result[key] = error;
