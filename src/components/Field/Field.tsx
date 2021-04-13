@@ -45,7 +45,14 @@ export const Field = React.memo((props: FieldProps) => {
   const onFormInputChange = (v: any, e?: string) => {
     const requiredError = required && (v === '' || v === null || v === undefined) ? 'Required' : undefined;
     const validatorError = validator ? validator(v, value) : undefined;
-    onChange({ ...value, [name]: v }, { ...safeErrors, [name]: requiredError || validatorError || e });
+    const finalError = requiredError || validatorError || e;
+    const finalErrors = { ...safeErrors, [name]: finalError };
+
+    if (!finalError) {
+      delete finalErrors[name];
+    }
+
+    onChange({ ...value, [name]: v }, finalErrors);
   };
 
   if (!type && !component) {
