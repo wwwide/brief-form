@@ -63,7 +63,7 @@ export const Field = React.memo((props: FieldProps) => {
     throw new Error(`Cannot instantiate form input component for field "${name}"`);
   }
 
-  return (<Field required={required} error={safeErrors[name]} label={label}>
+  return (<Field required={required} error={safeErrors[name]} label={label} name={name}>
     <FormInput
       {...inputProps}
       value={value[name]}
