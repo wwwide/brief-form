@@ -20,7 +20,7 @@ const FieldRenderer = React.memo((props: FormFieldProps) => {
 });
 
 const Input = (props: FormInputProps) => {
-  const { value, error, onChange, required, ...rest } = props;
+  const { value, onChange, required, ...rest } = props;
   return (<input
     {...rest}
     required={required}
@@ -65,7 +65,7 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
         inputProps={{
           autoFocus: true,
         }}
-        validator={(v, f) => v.length < 3 ? 'Name too short' : undefined}
+        validator={(v) => v.length < 3 ? 'Name too short' : undefined}
       />
       <Field
         required
@@ -73,7 +73,10 @@ export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) =>
         label="Age"
         type="input"
       />
-      <button onClick={() => { console.log(validate(true)); }}>Validate!</button>
+      <button onClick={() => {
+        // eslint-disable-next-line
+        console.log(validate(true));
+      }}>Validate!</button>
       <button disabled={!isValid || !isDirty}>Submit!</button>
     </BriefForm>
   </div>);
