@@ -10,12 +10,21 @@ export interface BriefFormProps {
   field: React.ComponentType<FormFieldProps>;
   registeredFields: React.RefObject<{ [key: string]: any }>;
   children: any;
+  onFieldReferenceSet?: (reference: React.RefObject<any>) => void;
 }
 
 export const BriefForm = React.memo((props: BriefFormProps) => {
-  const { value, errors, children, onChange, components, field, registeredFields } = props;
+  const { value, errors, children, onChange, components, field, registeredFields, onFieldReferenceSet } = props;
 
-  return (<BriefFormContext.Provider value={{ value, errors, onChange, components, field, registeredFields }}>
+  return (<BriefFormContext.Provider value={{
+    value,
+    errors,
+    onChange,
+    components,
+    field,
+    registeredFields,
+    onFieldReferenceSet,
+  }}>
     {children}
   </BriefFormContext.Provider>);
 });
