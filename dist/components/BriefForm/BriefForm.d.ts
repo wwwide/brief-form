@@ -12,6 +12,5 @@ export interface BriefFormProps {
         [key: string]: any;
     }>;
     children: any;
-    onFieldReferenceSet?: (reference: React.RefObject<any>) => void;
 }
 export declare const BriefForm: React.MemoExoticComponent<(props: BriefFormProps) => JSX.Element>;
