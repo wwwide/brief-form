@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { RegisteredField } from '../types';
+import { FormDataOptions, RegisteredField } from '../types';
 
 type ReturnType<T, E> = {
   formValue: T;
@@ -11,7 +11,7 @@ type ReturnType<T, E> = {
   validate: (withFormUpdate?: boolean) => ({ [key: string]: any });
 }
 
-export const useFormData = <T, E>(initial: T, errors?: E): ReturnType<T, E> => {
+export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormDataOptions): ReturnType<T, E> => {
   const [formValue, setFormValue] = React.useState<T>(initial);
   const [formErrors, setFormErrors] = React.useState(errors || {} as any);
   const [isDirty, setDirty] = React.useState(false);
@@ -31,7 +31,7 @@ export const useFormData = <T, E>(initial: T, errors?: E): ReturnType<T, E> => {
         const meta = registeredFields.current[key];
         const fieldValue = (formValue as any)[key];
         const inputError = meta.required && (fieldValue === '' || fieldValue === null || fieldValue === undefined)
-          ? 'Required'
+          ? opts?.requiredLabel || 'Required'
           : undefined;
         const validatorError = meta.validator ? meta.validator(fieldValue, formValue) : undefined;
         const error = validatorError || inputError || formErrors[key];
