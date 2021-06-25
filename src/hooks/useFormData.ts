@@ -47,7 +47,7 @@ export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormDataOptions
     }
 
     return result;
-  }, [registeredFields, formValue, setFormErrors, formErrors]);
+  }, [registeredFields, formValue, setFormErrors, formErrors, opts]);
 
   const isValid = !Object.keys(validate()).length;
 
