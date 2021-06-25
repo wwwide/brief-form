@@ -1,5 +1,5 @@
 export * from './formContextShape';
-export * from './formDataOptions';
+export * from './formOptions';
 export * from './formValuesShape';
 export * from './formErrorsShape';
 export * from './formInputProps';

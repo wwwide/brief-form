@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormDataOptions, RegisteredField } from '../types';
+import { FormOptions, RegisteredField } from '../types';
 declare type ReturnType<T, E> = {
     formValue: T;
     formErrors: E;
@@ -13,5 +13,5 @@ declare type ReturnType<T, E> = {
         [key: string]: any;
     });
 };
-export declare const useFormData: <T, E>(initial: T, errors?: E | undefined, opts?: FormDataOptions | undefined) => ReturnType<T, E>;
+export declare const useFormData: <T, E>(initial: T, errors?: E | undefined, opts?: FormOptions | undefined) => ReturnType<T, E>;
 export {};

@@ -3,6 +3,7 @@ import { FormValuesShape } from "./formValuesShape";
 import { FormErrorsShape } from "./formErrorsShape";
 import { FormInputProps } from "./formInputProps";
 import { FormFieldProps } from "./formFieldProps";
+import { FormOptions } from "./formOptions";
 
 export type FormContextShape = {
   value: { [key: string]: any };
@@ -11,4 +12,5 @@ export type FormContextShape = {
   components: { [key: string]: React.ComponentType<FormInputProps> };
   field: React.ComponentType<FormFieldProps>;
   registeredFields: React.RefObject<{ [key: string]: any }>;
+  options?: FormOptions;
 }

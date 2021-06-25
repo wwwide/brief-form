@@ -16,7 +16,7 @@ export interface FieldProps {
 export const Field = React.memo((props: FieldProps) => {
   const { name, type, component, debounced, required, label, inputProps, validator } = props;
   const context = React.useContext(BriefFormContext);
-  const { value, errors, onChange, components, field: Field, registeredFields } = context;
+  const { value, errors, onChange, components, field: Field, registeredFields, options } = context;
   const FormInput = component || components[type || ''];
   const safeErrors = errors || {};
 
@@ -43,7 +43,10 @@ export const Field = React.memo((props: FieldProps) => {
   }
 
   const onFormInputChange = (v: any, e?: string) => {
-    const requiredError = required && (v === '' || v === null || v === undefined) ? 'Required' : undefined;
+    const requiredError = required && (v === '' || v === null || v === undefined)
+      ? options?.requiredLabel || 'Required'
+      : undefined;
+
     const validatorError = validator ? validator(v, value) : undefined;
     const finalError = requiredError || validatorError || e;
     const finalErrors = { ...safeErrors, [name]: finalError };

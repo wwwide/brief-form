@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { FormDataOptions, RegisteredField } from '../types';
+import { FormOptions, RegisteredField } from '../types';
 
 type ReturnType<T, E> = {
   formValue: T;
@@ -11,7 +11,7 @@ type ReturnType<T, E> = {
   validate: (withFormUpdate?: boolean) => ({ [key: string]: any });
 }
 
-export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormDataOptions): ReturnType<T, E> => {
+export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormOptions): ReturnType<T, E> => {
   const [formValue, setFormValue] = React.useState<T>(initial);
   const [formErrors, setFormErrors] = React.useState(errors || {} as any);
   const [isDirty, setDirty] = React.useState(false);
