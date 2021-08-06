@@ -1,4 +1,5 @@
 import * as React from 'react';
+import isEqual from 'lodash.isequal';
 import { FormOptions, RegisteredField } from '../types';
 
 type ReturnType<T, E> = {
@@ -20,7 +21,10 @@ export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormOptions): R
   const onChange = React.useCallback((value: T, errors: E) => {
     setFormValue(value);
     setFormErrors(errors);
-    setDirty(true);
+
+    if (!isEqual(initial, value)){
+      setDirty(true);
+    }
   }, [setFormValue, setFormErrors, setDirty, formValue, formErrors]);
 
   const validate = React.useCallback((withFormUpdate?: boolean) => {
