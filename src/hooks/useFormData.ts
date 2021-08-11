@@ -42,6 +42,8 @@ export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormOptions): R
 
         if (error) {
           result[key] = error;
+        } else {
+          delete result[key];
         }
       });
     }
