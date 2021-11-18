@@ -11,10 +11,11 @@ export interface FieldProps {
   required?: boolean;
   validator?: (v: any, f: FormValuesShape) => string | undefined;
   inputProps?: { [key: string]: any };
+  errorPosition?: string;
 }
 
 export const Field = React.memo((props: FieldProps) => {
-  const { name, type, component, debounced, required, label, inputProps, validator } = props;
+  const { name, type, component, debounced, required, label, inputProps, validator, ...rest } = props;
   const context = React.useContext(BriefFormContext);
   const { value, errors, onChange, components, field: Field, registeredFields, options } = context;
   const FormInput = component || components[type || ''];
@@ -66,7 +67,9 @@ export const Field = React.memo((props: FieldProps) => {
     throw new Error(`Cannot instantiate form input component for field "${name}"`);
   }
 
-  return (<Field required={required} error={safeErrors[name]} label={label} name={name}>
+  console.log(rest)
+
+  return (<Field {...rest} required={required} error={safeErrors[name]} label={label} name={name}>
     <FormInput
       {...inputProps}
       value={value[name]}
