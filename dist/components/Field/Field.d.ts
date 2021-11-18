@@ -11,5 +11,8 @@ export interface FieldProps {
     inputProps?: {
         [key: string]: any;
     };
+    fieldProps?: {
+        [key: string]: any;
+    };
 }
 export declare const Field: React.MemoExoticComponent<(props: FieldProps) => JSX.Element>;
