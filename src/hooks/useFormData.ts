@@ -25,7 +25,7 @@ export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormOptions): R
     if (!isEqual(initial, value)){
       setDirty(true);
     }
-  }, [setFormValue, setFormErrors, setDirty, formValue, formErrors]);
+  }, [setFormValue, setFormErrors, setDirty, formValue, formErrors, initial]);
 
   const validate = React.useCallback((withFormUpdate?: boolean) => {
     const result: { [key: string]: any } = {};
