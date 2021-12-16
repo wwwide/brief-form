@@ -1,6 +1,6 @@
 {
   "name": "brief-form",
-  "version": "0.0.41",
+  "version": "0.0.42",
   "main": "./dist/index.js",
   "scripts": {
     "lint": "eslint --fix --ext .tsx,.ts ./src",

@@ -22,9 +22,7 @@ export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormOptions): R
     setFormValue(value);
     setFormErrors(errors);
 
-    if (!isEqual(initial, value)){
-      setDirty(true);
-    }
+    setDirty(!isEqual(initial, value));
   }, [setFormValue, setFormErrors, setDirty, formValue, formErrors, initial]);
 
   const validate = React.useCallback((withFormUpdate?: boolean) => {
