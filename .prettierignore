@@ -1,0 +1,6 @@
+node_modules/
+public/
+dist/
+cicd/
+package.json
+**/.next/**

@@ -1,93 +1,95 @@
-import * as React from 'react';
-import { Meta, Story } from '@storybook/react/types-6-0';
-import { BriefForm, BriefFormProps, Field } from '../components';
-import { FormFieldProps, FormInputProps } from '../types';
-import { useFormData } from "../hooks";
+import React, { FC, memo } from 'react'
+import { Meta, Story } from '@storybook/react/types-6-0'
+import { BriefForm } from '../components'
+import { FormInputProps, FormFieldProps, FormErrorsShape } from '../types'
+import { useFormData } from '../hooks'
 
 export default {
   title: 'Form',
-  component: BriefForm,
-} as Meta;
+  component: BriefForm
+} as Meta
 
-const FieldRenderer = React.memo((props: FormFieldProps) => {
-  const { label, required, error, children } = props;
+const FieldRenderer = function <ValueType, InputProps>(props: FormFieldProps<ValueType, InputProps>) {
+  const { label, required, error, children } = props
 
-  return (<div style={{ marginBottom: '20px' }}>
-    {!!label && <div>{label}{required && <b style={{ color: 'red' }}>*</b>}</div>}
-    {children}
-    {!!error && <div><i>{error}</i></div>}
-  </div>);
-});
+  return (
+    <div style={{ marginBottom: '20px' }}>
+      {!!label && (
+        <div>
+          {label}
+          {required && <b style={{ color: 'red' }}>*</b>}
+        </div>
+      )}
+      {children}
+      {!!error && (
+        <div>
+          <i>{error}</i>
+        </div>
+      )}
+    </div>
+  )
+}
 
-const Input = (props: FormInputProps) => {
-  const { value, onChange, required, ...rest } = props;
-  return (<input
-    {...rest}
-    required={required}
-    value={value}
-    onChange={(e) => onChange(e.target.value, undefined)}
-  />);
-};
+const Input: FC<FormInputProps<string, { y: boolean }>> = (props) => {
+  const { value, onChange, ...rest } = props
+  return <input {...rest} value={value} onChange={(e) => onChange(e.target.value, undefined)} />
+}
 
-const components = {
-  'input': Input,
-};
+type SampleForm = {
+  name: string
+  age: number
+}
 
-export const BriefFormSample: Story<BriefFormProps> = (props: BriefFormProps) => {
-  const {
-    formValue,
-    formErrors,
-    onChange,
-    registeredFields,
-    validate,
-    isValid,
-    isDirty,
-  } = useFormData(props.value, props.errors);
+export const BriefFormSample: Story = (props) => {
+  const { validate, isValid, isDirty, value, errors, onChange, registeredFields, Field } = useFormData<SampleForm>(
+    FieldRenderer,
+    { name: '', age: 0 }
+  )
 
-  const onChangeWrapper = React.useCallback((v, e) => {
-    onChange(v, { ...e, age: v.name === 'Andrey' ? undefined : 'Old guy' });
-  }, [onChange]);
+  const onChangeWrapper = (v: SampleForm, e: FormErrorsShape<SampleForm>) => {
+    onChange(v, e)
+  }
 
-  return (<div style={{ width: '500px', fontFamily: 'sans-serif' }}>
-    <BriefForm
-      value={formValue}
-      errors={formErrors}
-      onChange={onChangeWrapper}
-      components={components}
-      field={FieldRenderer}
-      registeredFields={registeredFields}
-    >
-      <Field
-        required
-        name="name"
-        label="Name"
-        type="input"
-        inputProps={{
-          autoFocus: true,
-        }}
-        validator={(v) => v.length < 3 ? 'Name too short' : undefined}
-      />
-      <Field
-        required
-        name="age"
-        label="Age"
-        type="input"
-      />
-      <button onClick={() => {
-        // eslint-disable-next-line
-        console.log(validate(true));
-      }}>Validate!</button>
-      <button disabled={!isValid || !isDirty}>Submit!</button>
-    </BriefForm>
-  </div>);
-};
+  return (
+    <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
+      <BriefForm
+        value={value}
+        errors={errors}
+        onChange={onChangeWrapper}
+        registeredFields={registeredFields}
+        UIField={FieldRenderer}
+      >
+        <Field<{ y: boolean }, string>
+          required
+          name="name"
+          label="Name"
+          input={Input}
+          validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
+          inputProps={{
+            y: false
+          }}
+        />
+        <Field required name="age" label="Age" input={Input} />
+        <button
+          onClick={() => {
+            // eslint-disable-next-line
+            console.log(validate(true))
+          }}
+        >
+          Validate!
+        </button>
+        <button disabled={!isValid || !isDirty}>Submit!</button>
+      </BriefForm>
+    </div>
+  )
+}
 
 BriefFormSample.args = {
   value: {
     name: '',
-    age: '',
+    age: ''
   },
   errors: {
     name: 'Unknown error!'
   }
-};
+}

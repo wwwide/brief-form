@@ -1,11 +1,14 @@
-import * as React from 'react';
-import { FormContextShape } from '../types';
+import { createContext, createRef } from 'react'
+import { FormContextShape } from '../types'
 
-export const BriefFormContext = React.createContext<FormContextShape>({
+export const BriefFormContext = createContext<FormContextShape<any>>({
   value: {},
   errors: {},
-  components: {},
-  field: () => { return null; },
-  onChange: () => { return; },
-  registeredFields: React.createRef(),
-});
+  UIField: () => {
+    return null
+  },
+  onChange: () => {
+    return
+  },
+  registeredFields: createRef()
+})

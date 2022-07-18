@@ -1,9 +1,14 @@
-import * as React from 'react';
+import { ReactNode, ReactElement } from 'react'
+import { FormInputProps } from './FormInputProps'
 
-export interface FormFieldProps {
-  children: any;
-  name: string;
-  label?: React.ReactNode;
-  error?: string;
-  required?: boolean;
+/**
+ * Props interface which should be implemented by UI field component
+ * (which will draw label, errors, input component (a-ka children))
+ */
+export interface FormFieldProps<ValueType, InputProps> {
+  children: ReactElement<FormInputProps<ValueType, InputProps>>
+  name: string
+  label?: ReactNode
+  error?: string
+  required?: boolean
 }

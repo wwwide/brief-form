@@ -1,18 +1,2 @@
-import * as React from 'react';
-import { FormInputProps, FormValuesShape } from '../../types';
-export interface FieldProps {
-    name: string;
-    type?: string;
-    label?: React.ReactNode;
-    component?: React.ComponentType<FormInputProps>;
-    debounced?: boolean;
-    required?: boolean;
-    validator?: (v: any, f: FormValuesShape) => string | undefined;
-    inputProps?: {
-        [key: string]: any;
-    };
-    fieldProps?: {
-        [key: string]: any;
-    };
-}
-export declare const Field: React.MemoExoticComponent<(props: FieldProps) => JSX.Element>;
+import { FieldProps } from './FieldProps';
+export declare const Field: <FormShape, InputProps, ValueType extends FormShape[keyof FormShape]>(props: FieldProps<InputProps, ValueType, FormShape>) => JSX.Element;

@@ -1,7 +1,6 @@
-import * as React from 'react';
-export declare type RegisteredField = {
-    name: string;
-    ref: React.RefObject<any>;
-    required: boolean;
-    validator?: (v: any, f: any) => string | undefined;
+/**
+ * Field metadata.
+ */
+export declare type RegisteredField<FormShape> = {
+    validator?: (v: any, f: FormShape) => string | undefined;
 };

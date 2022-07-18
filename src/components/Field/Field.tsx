@@ -1,80 +1,59 @@
-import * as React from 'react';
-import { BriefFormContext } from '../../context';
-import { FormInputProps, FormValuesShape } from '../../types';
+import React, { memo, useContext, useEffect, useCallback } from 'react'
+import { FormContextShape } from '../../types'
+import { BriefFormContext } from '../../context'
+import { FieldProps } from './FieldProps'
 
-export interface FieldProps {
-  name: string;
-  type?: string;
-  label?: React.ReactNode;
-  component?: React.ComponentType<FormInputProps>;
-  debounced?: boolean;
-  required?: boolean;
-  validator?: (v: any, f: FormValuesShape) => string | undefined;
-  inputProps?: { [key: string]: any };
-  fieldProps?: { [key: string]: any };
-}
+export const Field = function <FormShape, InputProps, ValueType extends FormShape[keyof FormShape]>(
+  props: FieldProps<InputProps, ValueType, FormShape>
+) {
+  const { name, input, label, error, required, inputProps, validator } = props
+  const context = useContext<FormContextShape<FormShape>>(BriefFormContext)
+  const { value, errors, onChange, UIField, registeredFields } = context
+  const Input = input
+  const safeErrors = errors || {}
 
-export const Field = React.memo((props: FieldProps) => {
-  const { name, type, component, debounced, required, label, inputProps, validator, ...fieldProps } = props;
-  const context = React.useContext(BriefFormContext);
-  const { value, errors, onChange, components, field: Field, registeredFields, options } = context;
-  const FormInput = component || components[type || ''];
-  const safeErrors = errors || {};
-
-  React.useEffect(() => {
-    if (registeredFields?.current) {
+  useEffect(() => {
+    if (registeredFields.current) {
       if (!registeredFields.current[name]) {
         registeredFields.current[name] = {
-          name,
-          required,
-          validator,
-        };
+          validator
+        }
       }
     }
 
     return () => {
-      if (registeredFields?.current) {
-        delete registeredFields.current[name];
+      if (registeredFields.current) {
+        delete registeredFields.current[name]
       }
     }
-  }, [name, validator, required, FormInput]);
+  }, [name, validator])
 
-  if (Object.keys(value).indexOf(name) === -1) {
-    throw new Error(`Field name "${name}" doesn't present in form value object.`);
+  if (Object.keys(value).indexOf(String(name)) === -1) {
+    throw new Error(`Field name "${String(name)}" doesn't present in form value object.`)
   }
 
-  const onFormInputChange = (v: any, e?: string) => {
-    const requiredError = required && (v === '' || v === null || v === undefined)
-      ? options?.requiredLabel || 'Required'
-      : undefined;
-
-    const validatorError = validator ? validator(v, value) : undefined;
-    const finalError = requiredError || validatorError || e;
-    const finalErrors = { ...safeErrors, [name]: finalError };
-
-    if (!finalError) {
-      delete finalErrors[name];
-    }
-
-    onChange({ ...value, [name]: v }, finalErrors);
-  };
-
-  if (!type && !component) {
-    throw new Error('Either "type" or "component" props should be passed to render proper form input control.');
+  if (!Input) {
+    throw new Error(`Cannot instantiate form input component for field "${String(name)}"`)
   }
 
-  if (!FormInput) {
-    throw new Error(`Cannot instantiate form input component for field "${name}"`);
-  }
+  const onFormInputChange = useCallback(
+    (v: ValueType, e?: string) => {
+      const validatorError = validator ? validator(v, value) : undefined
+      const finalError = validatorError || e || ''
+      const finalErrors = { ...safeErrors, [name]: finalError }
 
-  return (<Field {...fieldProps} required={required} error={safeErrors[name]} label={label} name={name}>
-    <FormInput
-      {...inputProps}
-      value={value[name]}
-      error={safeErrors[name]}
-      onChange={onFormInputChange}
-      debounced={debounced}
-      required={required}
-    />
-  </Field>);
-});
+      if (!finalError) {
+        delete finalErrors[name]
+      }
+
+      onChange({ ...value, [name]: v }, finalErrors)
+    },
+    [validator, value, name]
+  )
+
+  return (
+    <UIField error={error || errors[name]} required={required} label={label} name={String(name)}>
+      <Input {...inputProps} value={value[name] as ValueType} error={safeErrors[name]} onChange={onFormInputChange} />
+    </UIField>
+  )
+}

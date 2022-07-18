@@ -1,59 +1,68 @@
-import * as React from 'react';
-import isEqual from 'lodash.isequal';
-import { FormOptions, RegisteredField } from '../types';
+import { FC, useCallback, useState, useRef, RefObject } from 'react'
+import isEqual from 'lodash.isequal'
+import { FormErrorsShape, RegisteredField, FormFieldProps } from '../types'
+import { useValidate } from './useValidate'
+import { useFormComponent } from './useFormComponent'
+import { useFieldComponent } from './useFieldComponent'
+import { FieldProps } from '../components'
 
-type ReturnType<T, E> = {
-  formValue: T;
-  formErrors: E;
-  onChange: (value: T, errors: E) => void;
-  isDirty: boolean;
-  isValid: boolean;
-  registeredFields: React.RefObject<{ [key: string]: RegisteredField }>;
-  validate: (withFormUpdate?: boolean) => ({ [key: string]: any });
+type UseFormDataReturnType<FormShape> = {
+  value: FormShape
+  errors: FormErrorsShape<FormShape>
+  onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void
+  isDirty: boolean
+  isValid: boolean
+  registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>
+  validate: (withFormUpdate?: boolean) => { [key: string]: any }
+  Form: FC
+  Field: <InputProps, ValueType extends FormShape[keyof FormShape]>(
+    props: FieldProps<InputProps, ValueType, FormShape>
+  ) => JSX.Element
 }
 
-export const useFormData = <T, E>(initial: T, errors?: E, opts?: FormOptions): ReturnType<T, E> => {
-  const [formValue, setFormValue] = React.useState<T>(initial);
-  const [formErrors, setFormErrors] = React.useState(errors || {} as any);
-  const [isDirty, setDirty] = React.useState(false);
-  const registeredFields = React.useRef<{ [key: string]: RegisteredField }>({});
+export const useFormData = <FormShape extends { [key: string]: any }>(
+  UIField: FC<FormFieldProps<any, any>>,
+  initialValue: FormShape,
+  initialErrors?: FormErrorsShape<FormShape>
+): UseFormDataReturnType<FormShape> => {
+  const { Field } = useFieldComponent<FormShape>()
 
-  const onChange = React.useCallback((value: T, errors: E) => {
-    setFormValue(value);
-    setFormErrors(errors);
+  const [value, setValue] = useState<FormShape>(initialValue)
 
-    setDirty(!isEqual(initial, value));
-  }, [setFormValue, setFormErrors, setDirty, formValue, formErrors, initial]);
+  const [errors, setErrors] = useState<FormErrorsShape<FormShape>>(
+    initialErrors || Object.keys(value).reduce((p, c) => ({ ...value, [c]: undefined }), value)
+  )
 
-  const validate = React.useCallback((withFormUpdate?: boolean) => {
-    const result: { [key: string]: any } = {};
+  const [isDirty, setDirty] = useState(false)
 
-    if (registeredFields.current) {
-      Object.keys(registeredFields.current).forEach((key) => {
-        const meta = registeredFields.current[key];
-        const fieldValue = (formValue as any)[key];
-        const inputError = meta.required && (fieldValue === '' || fieldValue === null || fieldValue === undefined)
-          ? opts?.requiredLabel || 'Required'
-          : undefined;
-        const validatorError = meta.validator ? meta.validator(fieldValue, formValue) : undefined;
-        const error = validatorError || inputError || formErrors[key];
+  const registeredFields = useRef<{ [key in keyof FormShape]: RegisteredField<FormShape> }>(
+    Object.keys(value).reduce((p, c) => ({ ...value, [c]: {} }), value)
+  )
 
-        if (error) {
-          result[key] = error;
-        } else {
-          delete result[key];
-        }
-      });
-    }
+  const { validate } = useValidate<FormShape>(registeredFields, value, errors, setErrors)
 
-    if (withFormUpdate) {
-      setFormErrors({ ...formErrors, ...result });
-    }
+  const onChange = useCallback(
+    (value: FormShape, errors: FormErrorsShape<FormShape>) => {
+      setValue(value)
+      setErrors(errors)
+      setDirty(!isEqual(initialValue, value))
+    },
+    [setValue, setErrors, setDirty, initialValue]
+  )
 
-    return result;
-  }, [registeredFields, formValue, setFormErrors, formErrors, opts]);
+  const { Form } = useFormComponent(value, errors, onChange, registeredFields, UIField)
 
-  const isValid = !Object.keys(validate()).length;
+  const isValid = !Object.keys(validate()).length
 
-  return { formValue, formErrors, onChange, isDirty, isValid, registeredFields, validate };
-};
+  return {
+    value,
+    errors,
+    onChange,
+    isDirty,
+    isValid,
+    registeredFields,
+    validate,
+    Form,
+    Field
+  }
+}

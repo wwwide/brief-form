@@ -1,17 +1,22 @@
-import * as React from 'react';
-import { FormOptions, RegisteredField } from '../types';
-declare type ReturnType<T, E> = {
-    formValue: T;
-    formErrors: E;
-    onChange: (value: T, errors: E) => void;
+import { FC, RefObject } from 'react';
+import { FormErrorsShape, RegisteredField, FormFieldProps } from '../types';
+import { FieldProps } from '../components';
+declare type UseFormDataReturnType<FormShape> = {
+    value: FormShape;
+    errors: FormErrorsShape<FormShape>;
+    onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void;
     isDirty: boolean;
     isValid: boolean;
-    registeredFields: React.RefObject<{
-        [key: string]: RegisteredField;
+    registeredFields: RefObject<{
+        [key in keyof FormShape]: RegisteredField<FormShape>;
     }>;
-    validate: (withFormUpdate?: boolean) => ({
+    validate: (withFormUpdate?: boolean) => {
         [key: string]: any;
-    });
+    };
+    Form: FC;
+    Field: <InputProps, ValueType extends FormShape[keyof FormShape]>(props: FieldProps<InputProps, ValueType, FormShape>) => JSX.Element;
 };
-export declare const useFormData: <T, E>(initial: T, errors?: E | undefined, opts?: FormOptions | undefined) => ReturnType<T, E>;
+export declare const useFormData: <FormShape extends {
+    [key: string]: any;
+}>(UIField: FC<FormFieldProps<any, any>>, initialValue: FormShape, initialErrors?: FormErrorsShape<FormShape> | undefined) => UseFormDataReturnType<FormShape>;
 export {};
