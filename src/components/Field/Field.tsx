@@ -53,7 +53,13 @@ export const Field = function <FormShape, InputProps, ValueType extends FormShap
 
   return (
     <FR error={error || errors[name]} required={required} label={label} name={String(name)}>
-      <Input {...inputProps} value={value[name] as ValueType} error={safeErrors[name]} onChange={onFormInputChange} />
+      <Input
+        {...inputProps}
+        required={required}
+        value={value[name] as ValueType}
+        error={safeErrors[name]}
+        onChange={onFormInputChange}
+      />
     </FR>
   )
 }
