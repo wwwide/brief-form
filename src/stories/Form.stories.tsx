@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { Form } from '../components'
+import { Form, FormProvider } from '../components'
 import { FormInputProps, FormFieldProps } from '../types'
 import { useFormData } from '../hooks'
 
@@ -44,30 +44,32 @@ export const BriefFormSample: Story = () => {
   const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>({ name: '', age: 0 })
 
   return (
-    <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
-      <Form config={config} UIField={FieldRenderer}>
-        <Field<{ y: boolean }, string>
-          required
-          name="name"
-          label="Name"
-          input={Input}
-          validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
-          inputProps={{
-            y: false
-          }}
-        />
-        <Field required name="age" label="Age" input={Input} />
-        <button
-          onClick={() => {
-            // eslint-disable-next-line
-            console.log(validate(true))
-          }}
-        >
-          Validate!
-        </button>
-        <button disabled={!isValid || !isDirty}>Submit!</button>
-      </Form>
-    </div>
+    <FormProvider fieldRenderer={FieldRenderer}>
+      <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
+        <Form config={config}>
+          <Field<{ y: boolean }, string>
+            required
+            name="name"
+            label="Name"
+            input={Input}
+            validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
+            inputProps={{
+              y: false
+            }}
+          />
+          <Field required name="age" label="Age" input={Input} />
+          <button
+            onClick={() => {
+              // eslint-disable-next-line
+              console.log(validate(true))
+            }}
+          >
+            Validate!
+          </button>
+          <button disabled={!isValid || !isDirty}>Submit!</button>
+        </Form>
+      </div>
+    </FormProvider>
   )
 }
 

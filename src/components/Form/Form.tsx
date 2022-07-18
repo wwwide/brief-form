@@ -1,13 +1,18 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useContext } from 'react'
 import { FormProps } from './FormProps'
-import { FormContext } from '../../context'
+import { FormConfigContext, FormContext } from '../../context'
 
 export const Form = function <FormShape extends { [key: string]: any }>(props: FormProps<FormShape>): ReactElement {
   const {
     config: { value, errors, registeredFields, onChange },
-    children,
-    UIField
+    fieldRenderer,
+    children
   } = props
+  const { fieldRenderer: GlobalField } = useContext(FormConfigContext)
+
+  if (!fieldRenderer && GlobalField.name === 'fieldStub') {
+    throw new Error('you should pass fieldRenderer prop to your Form or wrap your Form in FormProvider component')
+  }
 
   return (
     <FormContext.Provider
@@ -15,7 +20,7 @@ export const Form = function <FormShape extends { [key: string]: any }>(props: F
         value,
         errors,
         onChange,
-        UIField,
+        fieldRenderer: fieldRenderer || GlobalField,
         registeredFields
       }}
     >

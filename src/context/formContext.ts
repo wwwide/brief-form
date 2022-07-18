@@ -4,7 +4,7 @@ import { FormContextShape } from '../types'
 export const FormContext = createContext<FormContextShape<any>>({
   value: {},
   errors: {},
-  UIField: () => {
+  fieldRenderer: () => {
     return null
   },
   onChange: () => {

@@ -8,7 +8,7 @@ export const Field = function <FormShape, InputProps, ValueType extends FormShap
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator } = props
   const context = useContext<FormContextShape<FormShape>>(FormContext)
-  const { value, errors, onChange, UIField, registeredFields } = context
+  const { value, errors, onChange, fieldRenderer: FR, registeredFields } = context
   const Input = input
   const safeErrors = errors || {}
 
@@ -52,8 +52,8 @@ export const Field = function <FormShape, InputProps, ValueType extends FormShap
   )
 
   return (
-    <UIField error={error || errors[name]} required={required} label={label} name={String(name)}>
+    <FR error={error || errors[name]} required={required} label={label} name={String(name)}>
       <Input {...inputProps} value={value[name] as ValueType} error={safeErrors[name]} onChange={onFormInputChange} />
-    </UIField>
+    </FR>
   )
 }
