@@ -24,7 +24,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   const [value, setValue] = useState<FormShape>(initialValue)
 
   const [errors, setErrors] = useState<FormErrorsShape<FormShape>>(
-    initialErrors || Object.keys(value).reduce((p, c) => ({ ...value, [c]: undefined }), value)
+    initialErrors || Object.keys(value).reduce((p, c) => ({ ...p, [c]: undefined }), value)
   )
 
   const [isDirty, setDirty] = useState(false)
