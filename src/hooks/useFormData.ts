@@ -1,13 +1,13 @@
 import { FC, useCallback, useState, useRef } from 'react'
 import isEqual from 'lodash.isequal'
-import { BriefFormConfig, FormErrorsShape, RegisteredField, FormFieldProps } from '../types'
+import { FormConfig, FormErrorsShape, RegisteredField, FormFieldProps } from '../types'
 import { useValidate } from './useValidate'
 import { useFormComponent } from './useFormComponent'
 import { useFieldComponent } from './useFieldComponent'
 import { FieldProps } from '../components'
 
 type UseFormDataReturnType<FormShape> = {
-  config: BriefFormConfig<FormShape>
+  config: FormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
   validate: (withFormUpdate?: boolean) => { [key: string]: any }

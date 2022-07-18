@@ -1,12 +1,12 @@
 import React, { FC } from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { BriefForm } from '../components'
+import { Form } from '../components'
 import { FormInputProps, FormFieldProps } from '../types'
 import { useFormData } from '../hooks'
 
 export default {
   title: 'Form',
-  component: BriefForm
+  component: Form
 } as Meta
 
 const FieldRenderer = function <ValueType, InputProps>(props: FormFieldProps<ValueType, InputProps>) {
@@ -45,7 +45,7 @@ export const BriefFormSample: Story = () => {
 
   return (
     <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
-      <BriefForm config={config} UIField={FieldRenderer}>
+      <Form config={config} UIField={FieldRenderer}>
         <Field<{ y: boolean }, string>
           required
           name="name"
@@ -66,7 +66,7 @@ export const BriefFormSample: Story = () => {
           Validate!
         </button>
         <button disabled={!isValid || !isDirty}>Submit!</button>
-      </BriefForm>
+      </Form>
     </div>
   )
 }

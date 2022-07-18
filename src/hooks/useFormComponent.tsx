@@ -1,16 +1,16 @@
 import React, { FC } from 'react'
-import { FormFieldProps, BriefFormConfig } from '../types'
-import { BriefForm } from '../components'
+import { FormFieldProps, FormConfig } from '../types'
+import { Form as F } from '../components'
 
 export const useFormComponent = function <FormShape>(
-  config: BriefFormConfig<FormShape>,
+  config: FormConfig<FormShape>,
   UIField: FC<FormFieldProps<any, any>>
 ): { Form: FC } {
   const Form: FC = ({ children }) => {
     return (
-      <BriefForm<FormShape> config={config} UIField={UIField}>
+      <F<FormShape> config={config} UIField={UIField}>
         {children}
-      </BriefForm>
+      </F>
     )
   }
 

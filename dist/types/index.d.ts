@@ -1,4 +1,4 @@
-export * from './BriefFormConfig';
+export * from './FormConfig';
 export * from './FormContextShape';
 export * from './FormFieldProps';
 export * from './FormErrorsShape';

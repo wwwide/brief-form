@@ -1,2 +1,2 @@
-export * from './BriefForm';
+export * from './Form';
 export * from './Field';

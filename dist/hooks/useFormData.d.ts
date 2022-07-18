@@ -1,8 +1,8 @@
 import { FC } from 'react';
-import { BriefFormConfig, FormErrorsShape, FormFieldProps } from '../types';
+import { FormConfig, FormErrorsShape, FormFieldProps } from '../types';
 import { FieldProps } from '../components';
 declare type UseFormDataReturnType<FormShape> = {
-    config: BriefFormConfig<FormShape>;
+    config: FormConfig<FormShape>;
     isDirty: boolean;
     isValid: boolean;
     validate: (withFormUpdate?: boolean) => {

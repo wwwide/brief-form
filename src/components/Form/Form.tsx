@@ -1,10 +1,8 @@
 import React, { ReactElement } from 'react'
-import { BriefFormProps } from './BriefFormProps'
-import { BriefFormContext } from '../../context'
+import { FormProps } from './FormProps'
+import { FormContext } from '../../context'
 
-export const BriefForm = function <FormShape extends { [key: string]: any }>(
-  props: BriefFormProps<FormShape>
-): ReactElement {
+export const Form = function <FormShape extends { [key: string]: any }>(props: FormProps<FormShape>): ReactElement {
   const {
     config: { value, errors, registeredFields, onChange },
     children,
@@ -12,7 +10,7 @@ export const BriefForm = function <FormShape extends { [key: string]: any }>(
   } = props
 
   return (
-    <BriefFormContext.Provider
+    <FormContext.Provider
       value={{
         value,
         errors,
@@ -22,6 +20,6 @@ export const BriefForm = function <FormShape extends { [key: string]: any }>(
       }}
     >
       {children}
-    </BriefFormContext.Provider>
+    </FormContext.Provider>
   )
 }

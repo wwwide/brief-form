@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useCallback, ReactElement } from 'react'
 import { FormContextShape } from '../../types'
-import { BriefFormContext } from '../../context'
+import { FormContext } from '../../context'
 import { FieldProps } from './FieldProps'
 
 export const Field = function <FormShape, InputProps, ValueType extends FormShape[keyof FormShape]>(
   props: FieldProps<InputProps, ValueType, FormShape>
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator } = props
-  const context = useContext<FormContextShape<FormShape>>(BriefFormContext)
+  const context = useContext<FormContextShape<FormShape>>(FormContext)
   const { value, errors, onChange, UIField, registeredFields } = context
   const Input = input
   const safeErrors = errors || {}

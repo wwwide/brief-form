@@ -1,7 +1,7 @@
 import { RefObject } from 'react'
-import { FormErrorsShape, RegisteredField } from './'
+import { FormErrorsShape, RegisteredField } from '.'
 
-export type BriefFormConfig<FormShape> = {
+export type FormConfig<FormShape> = {
   value: FormShape
   errors: FormErrorsShape<FormShape>
   onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void

@@ -1,7 +1,7 @@
 import { createContext, createRef } from 'react'
 import { FormContextShape } from '../types'
 
-export const BriefFormContext = createContext<FormContextShape<any>>({
+export const FormContext = createContext<FormContextShape<any>>({
   value: {},
   errors: {},
   UIField: () => {
