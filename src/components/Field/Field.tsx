@@ -28,6 +28,9 @@ export const Field = function <FormShape, InputProps, ValueType extends FormShap
     }
   }, [name, validator])
 
+  // eslint-disable-next-line
+  console.log(name, value)
+
   if (Object.keys(value).indexOf(String(name)) === -1) {
     throw new Error(`Field name "${String(name)}" doesn't present in form value object.`)
   }

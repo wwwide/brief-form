@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { Form, FormProvider } from '../components'
+import { Form, FormProvider, Field } from '../components'
 import { FormInputProps, FormFieldProps } from '../types'
 import { useFormData } from '../hooks'
 
@@ -41,13 +41,13 @@ type SampleForm = {
 }
 
 export const BriefFormSample: Story = () => {
-  const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>({ name: '', age: 0 })
+  const { config, validate, isValid, isDirty } = useFormData<SampleForm>({ name: '', age: 0 })
 
   return (
     <FormProvider fieldRenderer={FieldRenderer}>
       <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
         <Form config={config}>
-          <Field<{ y: boolean }, string>
+          <Field
             required
             name="name"
             label="Name"
