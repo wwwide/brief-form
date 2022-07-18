@@ -1,3 +1,4 @@
+export * from './BriefFormConfig'
 export * from './FormContextShape'
 export * from './FormFieldProps'
 export * from './FormErrorsShape'

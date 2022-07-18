@@ -1,5 +1,10 @@
 import { RefObject } from 'react';
 import { FormErrorsShape, RegisteredField } from '../types';
+export declare type UseValidateReturnValue = {
+    validate: (withUpdate?: boolean) => {
+        [key: string]: string | undefined;
+    };
+};
 /**
  * Hook returning validate function. Optionally thid function can update
  * from UI during the validation.
@@ -11,6 +16,4 @@ import { FormErrorsShape, RegisteredField } from '../types';
  */
 export declare const useValidate: <FormShape extends {
     [key: string]: any;
-}>(registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape>; }>, value: FormShape, errors: FormErrorsShape<FormShape>, updateErrorsRoutine: (errors: FormErrorsShape<FormShape>) => void) => {
-    validate: (withFormUpdate?: boolean) => FormErrorsShape<FormShape>;
-};
+}>(registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape>; }>, value: FormShape, errors: FormErrorsShape<FormShape>, updateErrorsRoutine: (errors: FormErrorsShape<FormShape>) => void) => UseValidateReturnValue;

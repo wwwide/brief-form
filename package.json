@@ -5,8 +5,7 @@
   "scripts": {
     "lint": "eslint --fix --ext .tsx,.ts ./src",
     "build": "npm run lint && rm -rf ./dist && webpack --config ./webpack.config.js --mode=production",
-    "storybook": "start-storybook -p 3005",
-    "build-storybook": "build-storybook"
+    "storybook": "start-storybook -p 3005"
   },
   "repository": "git@github.com:andrey-barkanov/brief-form.git",
   "author": "Andrey Barkanov",

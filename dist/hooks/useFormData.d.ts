@@ -1,15 +1,10 @@
-import { FC, RefObject } from 'react';
-import { FormErrorsShape, RegisteredField, FormFieldProps } from '../types';
+import { FC } from 'react';
+import { BriefFormConfig, FormErrorsShape, FormFieldProps } from '../types';
 import { FieldProps } from '../components';
 declare type UseFormDataReturnType<FormShape> = {
-    value: FormShape;
-    errors: FormErrorsShape<FormShape>;
-    onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void;
+    config: BriefFormConfig<FormShape>;
     isDirty: boolean;
     isValid: boolean;
-    registeredFields: RefObject<{
-        [key in keyof FormShape]: RegisteredField<FormShape>;
-    }>;
     validate: (withFormUpdate?: boolean) => {
         [key: string]: any;
     };

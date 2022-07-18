@@ -1,7 +1,7 @@
-import React, { FC, memo } from 'react'
+import React, { FC } from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
 import { BriefForm } from '../components'
-import { FormInputProps, FormFieldProps, FormErrorsShape } from '../types'
+import { FormInputProps, FormFieldProps } from '../types'
 import { useFormData } from '../hooks'
 
 export default {
@@ -40,25 +40,12 @@ type SampleForm = {
   age: number
 }
 
-export const BriefFormSample: Story = (props) => {
-  const { validate, isValid, isDirty, value, errors, onChange, registeredFields, Field } = useFormData<SampleForm>(
-    FieldRenderer,
-    { name: '', age: 0 }
-  )
-
-  const onChangeWrapper = (v: SampleForm, e: FormErrorsShape<SampleForm>) => {
-    onChange(v, e)
-  }
+export const BriefFormSample: Story = () => {
+  const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>(FieldRenderer, { name: '', age: 0 })
 
   return (
     <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
-      <BriefForm
-        value={value}
-        errors={errors}
-        onChange={onChangeWrapper}
-        registeredFields={registeredFields}
-        UIField={FieldRenderer}
-      >
+      <BriefForm config={config} UIField={FieldRenderer}>
         <Field<{ y: boolean }, string>
           required
           name="name"

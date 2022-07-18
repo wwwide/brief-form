@@ -1,12 +1,7 @@
-import { FC, RefObject } from 'react';
-import { FormErrorsShape, RegisteredField, FormFieldProps } from '../../types';
+import { FC } from 'react';
+import { BriefFormConfig, FormFieldProps } from '../../types';
 export interface BriefFormProps<FormShape> {
-    value: FormShape;
-    errors: FormErrorsShape<FormShape>;
-    onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void;
+    config: BriefFormConfig<FormShape>;
     UIField: FC<FormFieldProps<any, any>>;
-    registeredFields: RefObject<{
-        [key in keyof FormShape]: RegisteredField<FormShape>;
-    }>;
-    children: any;
+    children?: any;
 }

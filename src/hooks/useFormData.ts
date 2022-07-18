@@ -1,18 +1,15 @@
-import { FC, useCallback, useState, useRef, RefObject } from 'react'
+import { FC, useCallback, useState, useRef } from 'react'
 import isEqual from 'lodash.isequal'
-import { FormErrorsShape, RegisteredField, FormFieldProps } from '../types'
+import { BriefFormConfig, FormErrorsShape, RegisteredField, FormFieldProps } from '../types'
 import { useValidate } from './useValidate'
 import { useFormComponent } from './useFormComponent'
 import { useFieldComponent } from './useFieldComponent'
 import { FieldProps } from '../components'
 
 type UseFormDataReturnType<FormShape> = {
-  value: FormShape
-  errors: FormErrorsShape<FormShape>
-  onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void
+  config: BriefFormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
-  registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>
   validate: (withFormUpdate?: boolean) => { [key: string]: any }
   Form: FC
   Field: <InputProps, ValueType extends FormShape[keyof FormShape]>(
@@ -50,19 +47,21 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     [setValue, setErrors, setDirty, initialValue]
   )
 
-  const { Form } = useFormComponent(value, errors, onChange, registeredFields, UIField)
+  const { Form } = useFormComponent({ value, errors, onChange, registeredFields }, UIField)
 
   const isValid = !Object.keys(validate()).length
 
   return {
-    value,
-    errors,
-    onChange,
     isDirty,
     isValid,
-    registeredFields,
     validate,
     Form,
-    Field
+    Field,
+    config: {
+      value,
+      errors,
+      onChange,
+      registeredFields
+    }
   }
 }
