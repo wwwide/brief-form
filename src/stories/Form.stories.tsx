@@ -41,7 +41,7 @@ type SampleForm = {
 }
 
 export const BriefFormSample: Story = () => {
-  const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>(FieldRenderer, { name: '', age: 0 })
+  const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>({ name: '', age: 0 })
 
   return (
     <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
