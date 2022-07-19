@@ -6,5 +6,6 @@ function fieldStub() {
 }
 
 export const FormConfigContext = createContext<FormConfigContextShape>({
-  fieldRenderer: fieldStub
+  fieldRenderer: fieldStub,
+  crashIfRequiredFieldDoesNotHaveValidator: false
 })

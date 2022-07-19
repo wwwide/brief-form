@@ -1,14 +1,22 @@
 import React, { useContext, useEffect, useCallback, ReactElement } from 'react'
 import { FormContextShape } from '../../types'
-import { FormContext } from '../../context'
+import { FormContext, FormConfigContext } from '../../context'
 import { FieldProps } from './FieldProps'
 
 export const Field = function <FormShape, InputProps, ValueType extends FormShape[keyof FormShape]>(
   props: FieldProps<InputProps, ValueType, FormShape>
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator } = props
-  const context = useContext<FormContextShape<FormShape>>(FormContext)
-  const { value, errors, onChange, fieldRenderer: FR, registeredFields } = context
+  const { crashIfRequiredFieldDoesNotHaveValidator } = useContext(FormConfigContext)
+
+  const {
+    value,
+    errors,
+    onChange,
+    fieldRenderer: FR,
+    registeredFields
+  } = useContext<FormContextShape<FormShape>>(FormContext)
+
   const Input = input
   const safeErrors = errors || {}
 
@@ -34,6 +42,18 @@ export const Field = function <FormShape, InputProps, ValueType extends FormShap
 
   if (!Input) {
     throw new Error(`Cannot instantiate form input component for field "${String(name)}"`)
+  }
+
+  if (required && !validator) {
+    const message = `
+      Field "${String(name)}" is required but doesn't have a validator, which should check it
+      for "empty" value. Remove "required" property or add a validator.
+    `
+    if (crashIfRequiredFieldDoesNotHaveValidator) {
+      throw new Error(message)
+    } else {
+      console.error(message)
+    }
   }
 
   const onFormInputChange = useCallback(

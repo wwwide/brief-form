@@ -6,4 +6,5 @@ import { FormFieldProps } from '.';
  */
 export declare type FormConfigContextShape = {
     fieldRenderer: FC<FormFieldProps<any, any>>;
+    crashIfRequiredFieldDoesNotHaveValidator: boolean;
 };
