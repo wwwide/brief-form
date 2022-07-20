@@ -1,10 +1,9 @@
 /**
  * Props interface for input component which should be passed and rendered inside form field.
  */
-export interface FormInputProps<V, I> {
+export interface FormInputProps<V> {
   value: V
   onChange: (value: V, error?: string) => void
   error?: string
   required?: boolean
-  inputProps?: I
 }

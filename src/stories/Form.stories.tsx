@@ -30,7 +30,7 @@ const FieldRenderer = function <ValueType, InputProps>(props: FormFieldProps<Val
   )
 }
 
-const Input: FC<FormInputProps<string, { y: boolean }>> = (props) => {
+const Input: FC<FormInputProps<string> & { y: boolean }> = (props) => {
   const { value, onChange, ...rest } = props
   return <input {...rest} value={value} onChange={(e) => onChange(e.target.value, undefined)} />
 }
@@ -41,7 +41,7 @@ type SampleForm = {
 }
 
 export const BriefFormSample: Story = () => {
-  const { config, validate, isValid, isDirty } = useFormData<SampleForm>({ name: '', age: 0 })
+  const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>({ name: '', age: 0 })
 
   console.log(config.errors)
 
@@ -56,7 +56,8 @@ export const BriefFormSample: Story = () => {
             input={Input}
             validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
             inputProps={{
-              y: false
+              y: false,
+              x: 1
             }}
           />
           <Field required name="age" label="Age" input={Input} />

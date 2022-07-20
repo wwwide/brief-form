@@ -5,9 +5,10 @@ import { FormInputProps } from './FormInputProps';
  * (which will draw label, errors, input component (a-ka children))
  */
 export interface FormFieldProps<ValueType, InputProps> {
-    children: ReactElement<FormInputProps<ValueType, InputProps>>;
+    children: ReactElement<FormInputProps<ValueType> & InputProps>;
     name: string;
     label?: ReactNode;
     error?: string;
     required?: boolean;
+    inputProps?: InputProps;
 }

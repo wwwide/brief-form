@@ -5,7 +5,7 @@ export interface FieldProps<InputProps, ValueType, FormShape> {
     required?: boolean;
     error?: string;
     label?: ReactNode;
-    input: FC<FormInputProps<ValueType, InputProps>>;
+    input: FC<FormInputProps<ValueType> & InputProps>;
     validator?: (v: ValueType, f: FormShape) => string | undefined;
     inputProps?: InputProps;
 }
