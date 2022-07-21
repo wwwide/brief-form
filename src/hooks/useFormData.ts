@@ -30,7 +30,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   const [isDirty, setDirty] = useState(false)
 
   const registeredFields = useRef<{ [key in keyof FormShape]: RegisteredField<FormShape> }>(
-    Object.keys(value).reduce((p, c) => ({ ...value, [c]: undefined }), value)
+    Object.keys(value).reduce((p, c) => ({ ...p, [c]: undefined }), value)
   )
 
   const { validate } = useValidate<FormShape>(registeredFields, value, errors, setErrors)
