@@ -43,8 +43,6 @@ type SampleForm = {
 export const BriefFormSample: Story = () => {
   const { config, validate, isValid, isDirty, Field } = useFormData<SampleForm>({ name: '', age: 0 })
 
-  console.log(config.errors)
-
   return (
     <FormProvider fieldRenderer={FieldRenderer}>
       <div style={{ width: '500px', fontFamily: 'sans-serif' }}>
