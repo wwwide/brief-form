@@ -8,7 +8,7 @@ declare type UseFormDataReturnType<FormShape> = {
     validate: (withFormUpdate?: boolean) => {
         [key: string]: any;
     };
-    Field: <InputProps, ValueType extends FormShape[keyof FormShape]>(props: FieldProps<InputProps, ValueType, FormShape>) => JSX.Element;
+    Field: <InputProps, ValueType>(props: FieldProps<InputProps, ValueType, FormShape>) => JSX.Element;
 };
 export declare const useFormData: <FormShape extends {
     [key: string]: any;

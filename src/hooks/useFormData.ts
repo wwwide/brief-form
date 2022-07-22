@@ -10,7 +10,7 @@ type UseFormDataReturnType<FormShape> = {
   isDirty: boolean
   isValid: boolean
   validate: (withFormUpdate?: boolean) => { [key: string]: any }
-  Field: <InputProps, ValueType extends FormShape[keyof FormShape]>(
+  Field: <InputProps, ValueType>(
     props: FieldProps<InputProps, ValueType, FormShape>
   ) => JSX.Element
 }

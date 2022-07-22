@@ -3,7 +3,7 @@ import { FormContextShape } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
 import { FieldProps } from './FieldProps'
 
-export const Field = function <FormShape, InputProps, ValueType extends FormShape[keyof FormShape]>(
+export const Field = function <FormShape, InputProps, ValueType>(
   props: FieldProps<InputProps, ValueType, FormShape>
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator } = props
@@ -76,7 +76,7 @@ export const Field = function <FormShape, InputProps, ValueType extends FormShap
       <Input
         {...(inputProps as any)}
         required={required}
-        value={value[name] as ValueType}
+        value={value[name] as unknown as ValueType}
         error={safeErrors[name]}
         onChange={onFormInputChange}
       />
