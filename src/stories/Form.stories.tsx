@@ -1,6 +1,6 @@
 import React, { FC } from 'react'
 import { Meta, Story } from '@storybook/react/types-6-0'
-import { Form, FormProvider, Field } from '../components'
+import { Form, FormProvider } from '../components'
 import { FormInputProps, FormFieldProps } from '../types'
 import { useFormData } from '../hooks'
 
@@ -30,8 +30,10 @@ const FieldRenderer = function <ValueType, InputProps>(props: FormFieldProps<Val
   )
 }
 
-const Input: FC<FormInputProps<string> & { y: boolean }> = (props) => {
-  const { value, onChange, ...rest } = props
+const Input: FC<FormInputProps<string, { y: boolean, x: number }>> = (props) => {
+  const { value, onChange, opts, ...rest } = props
+  console.log(opts);
+  
   return <input {...rest} value={value} onChange={(e) => onChange(e.target.value, undefined)} />
 }
 
@@ -55,7 +57,7 @@ export const BriefFormSample: Story = () => {
             validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
             inputProps={{
               y: false,
-              x: 1
+              x: 1,
             }}
           />
           <Field required name="age" label="Age" input={Input} />

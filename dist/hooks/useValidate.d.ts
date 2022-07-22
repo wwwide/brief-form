@@ -15,5 +15,5 @@ export declare type UseValidateReturnValue = {
  * @returns validate function.
  */
 export declare const useValidate: <FormShape extends {
-    [key: string]: any;
+    [key: string]: string | undefined;
 }>(registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape>; }>, value: FormShape, errors: FormErrorsShape<FormShape>, updateErrorsRoutine: (errors: FormErrorsShape<FormShape>) => void) => UseValidateReturnValue;

@@ -1,10 +1,10 @@
-import React, { useContext, useEffect, useCallback, ReactElement } from 'react'
-import { FormContextShape } from '../../types'
+import React, { ComponentType, useContext, useEffect, useCallback, ReactElement } from 'react'
+import { FormContextShape, FormInputProps } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
-import { FieldProps } from './FieldProps'
+import { FieldProps, $ElementProps } from './FieldProps'
 
-export const Field = function <FormShape, InputProps, ValueType>(
-  props: FieldProps<InputProps, ValueType, FormShape>
+export const Field = function <FormShape, Input extends ComponentType<FormInputProps<any, any>>>(
+  props: FieldProps<Input, FormShape>
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator } = props
   const { crashIfRequiredFieldDoesNotHaveValidator } = useContext(FormConfigContext)
@@ -17,7 +17,7 @@ export const Field = function <FormShape, InputProps, ValueType>(
     registeredFields
   } = useContext<FormContextShape<FormShape>>(FormContext)
 
-  const Input = input
+  const Input: any = input
   const safeErrors = errors || {}
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const Field = function <FormShape, InputProps, ValueType>(
   }
 
   const onFormInputChange = useCallback(
-    (v: ValueType, e?: string) => {
+    (v: $ElementProps<Input>['value'], e?: string) => {
       const validatorError = validator ? validator(v, value) : undefined
       const finalError = validatorError || e || ''
       const finalErrors = { ...safeErrors, [name]: finalError }
@@ -74,9 +74,9 @@ export const Field = function <FormShape, InputProps, ValueType>(
   return (
     <FR error={error || errors[name]} required={required} label={label} name={String(name)}>
       <Input
-        {...(inputProps as any)}
+        opts={inputProps as unknown as $ElementProps<Input>['opts']}
         required={required}
-        value={value[name] as unknown as ValueType}
+        value={value[name] as unknown as $ElementProps<Input>['value']}
         error={safeErrors[name]}
         onChange={onFormInputChange}
       />

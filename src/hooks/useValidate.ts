@@ -14,7 +14,7 @@ export type UseValidateReturnValue = {
  * @param updateErrorsRoutine - routine for updating form errors
  * @returns validate function.
  */
-export const useValidate = <FormShape extends { [key: string]: any }>(
+export const useValidate = <FormShape extends { [key: string]: string | undefined }>(
   registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>,
   value: FormShape,
   errors: FormErrorsShape<FormShape>,

@@ -1,6 +1,6 @@
-import { useCallback, useState, useRef } from 'react'
+import { useCallback, useState, useRef, ComponentType } from 'react'
 import isEqual from 'lodash.isequal'
-import { FormConfig, FormErrorsShape, RegisteredField } from '../types'
+import { FormConfig, FormErrorsShape, RegisteredField, FormInputProps } from '../types'
 import { useValidate } from './useValidate'
 import { useFieldComponent } from './useFieldComponent'
 import { FieldProps } from '../components'
@@ -9,9 +9,9 @@ type UseFormDataReturnType<FormShape> = {
   config: FormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
-  validate: (withFormUpdate?: boolean) => { [key: string]: any }
-  Field: <InputProps, ValueType>(
-    props: FieldProps<InputProps, ValueType, FormShape>
+  validate: (withFormUpdate?: boolean) => { [key: string]: string | undefined }
+  Field: <Input extends ComponentType<FormInputProps<any, any>>>(
+    props: FieldProps<Input, FormShape>
   ) => JSX.Element
 }
 

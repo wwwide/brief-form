@@ -1,3 +1,4 @@
-import { ReactElement } from 'react';
+import React, { ReactElement } from 'react';
+import { FormInputProps } from '../../types';
 import { FieldProps } from './FieldProps';
-export declare const Field: <FormShape, InputProps, ValueType>(props: FieldProps<InputProps, ValueType, FormShape>) => ReactElement;
+export declare const Field: <FormShape, Input extends React.ComponentType<FormInputProps<any, any>>>(props: FieldProps<Input, FormShape>) => ReactElement;
