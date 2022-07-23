@@ -1,6 +1,6 @@
-import { ComponentType } from 'react';
+import { ComponentType, ReactElement } from 'react';
 import { FormConfig, FormErrorsShape, FormInputProps } from '../types';
-import { FieldProps } from '../components';
+import { FieldProps, FormProps } from '../components';
 declare type UseFormDataReturnType<FormShape> = {
     config: FormConfig<FormShape>;
     isDirty: boolean;
@@ -8,6 +8,9 @@ declare type UseFormDataReturnType<FormShape> = {
     validate: (withFormUpdate?: boolean) => {
         [key: string]: string | undefined;
     };
+    Form: <FormShape extends {
+        [key: string]: any;
+    }>(props: FormProps<FormShape>) => ReactElement;
     Field: <Input extends ComponentType<FormInputProps<any, any>>>(props: FieldProps<Input, FormShape>) => JSX.Element;
 };
 export declare const useFormData: <FormShape extends {
