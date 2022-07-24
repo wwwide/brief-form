@@ -30,10 +30,10 @@ const FieldRenderer = function <ValueType, InputProps>(props: FormFieldProps<Val
   )
 }
 
-const Input: FC<FormInputProps<string, { y: boolean, x: number }>> = (props) => {
+const Input: FC<FormInputProps<string, any>> = (props) => {
   const { value, onChange, opts, ...rest } = props
-  console.log(opts);
-  
+  console.log(opts)
+
   return <input {...rest} value={value} onChange={(e) => onChange(e.target.value, undefined)} />
 }
 
@@ -57,10 +57,10 @@ export const BriefFormSample: Story = () => {
             validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
             inputProps={{
               y: false,
-              x: 1,
+              x: 1
             }}
           />
-          <Field required name="age" label="Age" input={Input} />
+          <Field required name="age" label="Age" input={Input} inputProps={{}} />
           <button
             onClick={() => {
               // eslint-disable-next-line

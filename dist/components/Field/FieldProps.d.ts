@@ -8,5 +8,5 @@ export interface FieldProps<Input extends ComponentType<FormInputProps<any, any>
     label?: ReactNode;
     input: Input;
     validator?: (v: $ElementProps<Input>['value'], f: FormShape) => string | undefined;
-    inputProps?: $ElementProps<Input>['opts'];
+    inputProps: $ElementProps<Input>['opts'];
 }
