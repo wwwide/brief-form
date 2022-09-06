@@ -1,7 +1,7 @@
 import { ComponentType, ReactElement } from 'react';
 import { FormConfig, FormErrorsShape, FormInputProps } from '../types';
 import { FieldProps, FormProps } from '../components';
-declare type UseFormDataReturnType<FormShape> = {
+export declare type UseFormDataReturnType<FormShape> = {
     config: FormConfig<FormShape>;
     isDirty: boolean;
     isValid: boolean;
@@ -17,4 +17,3 @@ declare type UseFormDataReturnType<FormShape> = {
 export declare const useFormData: <FormShape extends {
     [key: string]: any;
 }>(initialValue: FormShape, initialErrors?: FormErrorsShape<FormShape> | undefined) => UseFormDataReturnType<FormShape>;
-export {};

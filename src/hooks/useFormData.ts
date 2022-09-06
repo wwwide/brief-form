@@ -5,7 +5,7 @@ import { useValidate } from './useValidate'
 import { useFieldComponent } from './useFieldComponent'
 import { FieldProps, Form, FormProps } from '../components'
 
-type UseFormDataReturnType<FormShape> = {
+export type UseFormDataReturnType<FormShape> = {
   config: FormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
