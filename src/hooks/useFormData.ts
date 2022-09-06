@@ -10,6 +10,7 @@ type UseFormDataReturnType<FormShape> = {
   isDirty: boolean
   isValid: boolean
   validate: (withFormUpdate?: boolean) => { [key: string]: string | undefined }
+  reset: (initialValue?: FormShape, errors?: FormErrorsShape<FormShape>) => void
   Form: <FormShape extends { [key: string]: any }>(props: FormProps<FormShape>) => ReactElement
   Field: <Input extends ComponentType<FormInputProps<any, any>>>(props: FieldProps<Input, FormShape>) => JSX.Element
 }
@@ -19,7 +20,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   initialErrors?: FormErrorsShape<FormShape>
 ): UseFormDataReturnType<FormShape> => {
   const { Field } = useFieldComponent<FormShape>()
-
+  const [savedInitialvalue, setSavedInitialValue] = useState<FormShape>(initialValue)
   const [value, setValue] = useState<FormShape>(initialValue)
 
   const [errors, setErrors] = useState<FormErrorsShape<FormShape>>(
@@ -27,6 +28,17 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   )
 
   const [isDirty, setDirty] = useState(false)
+
+  const reset = useCallback(
+    (initialValue?: FormShape, errors?: FormErrorsShape<FormShape>) => {
+      const initial = initialValue || savedInitialvalue
+      setSavedInitialValue(initial)
+      setValue(initialValue || savedInitialvalue)
+      setDirty(false)
+      setErrors(errors || ({} as any))
+    },
+    [savedInitialvalue, setValue, setDirty, setErrors, setSavedInitialValue]
+  )
 
   const registeredFields = useRef<{ [key in keyof FormShape]: RegisteredField<FormShape> }>(
     Object.keys(value).reduce((p, c) => ({ ...p, [c]: undefined }), value)
@@ -49,6 +61,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     isDirty,
     isValid,
     validate,
+    reset,
     Field,
     Form,
     config: {

@@ -8,6 +8,7 @@ declare type UseFormDataReturnType<FormShape> = {
     validate: (withFormUpdate?: boolean) => {
         [key: string]: string | undefined;
     };
+    reset: (initialValue?: FormShape, errors?: FormErrorsShape<FormShape>) => void;
     Form: <FormShape extends {
         [key: string]: any;
     }>(props: FormProps<FormShape>) => ReactElement;
