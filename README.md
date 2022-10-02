@@ -1,6 +1,6 @@
 # brief-form
 
-`brief-form` is a small React based form management tool. The main package API is `useFromData` hook which provides all necessary form data and service methods. It provides approach to manage form data but it's not bound to any particular UI implementation, so library can be used in web React apps or in the React Native applications.
+`brief-form` is a small React based form management tool. The main package API is `useFormData` hook which provides all necessary form data and service methods. It provides approach to manage form data but it's not bound to any particular UI implementation, so library can be used in web React apps or in the React Native applications.
 
 ## Quick usage example
 
@@ -75,7 +75,7 @@ FormProvider gives us ability to perform global form setup.
 
 `fieldRenderer` parameter accepts React component to be used for rendering form UI field.
 
-`crashIfRequiredFieldDoesNotHaveValidator` defines whether form should crash if it contains any fields marked as required but not providing validator function. In most cases it helps more quickly find required inputs without validators during development. Basically `required` field property just marks fields as required (e.g. field renderer can draw asterik near label for these fields). Validator function contains logic defining whether field "empty" or "filled". For example we can think about integer input as empty if its value is 0, but for more complex inputs things may be more complex and ambiguous. That's why we need custom validator here. 
+`crashIfRequiredFieldDoesNotHaveValidator` defines whether form should crash if it contains any fields marked as required but not providing validator function. In most cases it helps more quickly find required inputs without validators during development. Basically `required` field property just marks fields as required (e.g. field renderer can draw asterisk near label for these fields). Validator function contains logic defining whether field "empty" or "filled". For example we can think about integer input as empty if its value is 0, but for more complex inputs things may be more complex and ambiguous. That's why we need custom validator here. 
 
 We would recommend always use `FormProvider` component to reduce amount of boilerplate code.
 
@@ -100,7 +100,7 @@ This hook is the main library API.
 |Field||component to render UI input. It accepts form data field name, input renderer, validator etc. Look for detailed description in the sections below.|
 |Form||Form container component|
 
-We highly recommend to use Form and Field components returned from this hook, as its already bound to form type passed to hook.
+We highly recommend to use Form and Field components returned from this hook, as they are already bound to form type passed to hook.
 
 ## Field
 
@@ -126,7 +126,7 @@ export interface FormInputProps<V, P> {
   opts: P                                       
   // input value
   value: V                                      
-  // value change handler (input specific error can be passed as second argument)
+  // value change handler (input specific error can be passed as a second argument)
   onChange: (value: V, error?: string) => void  
   // input error
   error?: string
@@ -135,7 +135,7 @@ export interface FormInputProps<V, P> {
 }
 ```
 
-As we can see here each form input component is given all basic necessarry data to properly display its state and handle value updates.
+As we can see here, each form input component is given all basic necessarry data to properly display its state and handle value updates.
 
 Let's imagine we want to implement check box list input for our form:
 
