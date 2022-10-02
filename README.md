@@ -1,6 +1,6 @@
 # brief-form
 
-**brief-form** is a small React based form management tool. The main package API is useFromData hook which provides all necessary form data and service methods. It provides approach to manage form data but it's not bound to any particular UI implementation, so library can be used in web React apps or in the React Native applications.
+`brief-form` is a small React based form management tool. The main package API is `useFromData` hook which provides all necessary form data and service methods. It provides approach to manage form data but it's not bound to any particular UI implementation, so library can be used in web React apps or in the React Native applications.
 
 ## Quick usage example
 
@@ -62,7 +62,7 @@ Let's dig into more details!
 
 ## Form
 
-Form is a container component holding all UI fields. The only required parameter is **config**. It's value returned from **useFormData** hook. As were mentioned before, library doesn't contain any UI implementations, so we should explicitly define which UI component should render form UI field (basically it should render label, input and error). We can do it through **fieldRenderer Form** parameter to set renderer individually for each form. Or we can use **FormProvider** component and set up this renderer globally for all nested forms.
+Form is a container component holding all UI fields. The only required parameter is `config`. It's value returned from `useFormData` hook. As were mentioned before, library doesn't contain any UI implementations, so we should explicitly define which UI component should render form UI field (basically it should render label, input and error). We can do it through `fieldRenderer` Form parameter to set renderer individually for each form. Or we can use `FormProvider` component and set up this renderer globally for all nested forms.
 
 ```javascript
 <Form config={config} fieldRenderer={UIField}>
@@ -73,11 +73,11 @@ Form is a container component holding all UI fields. The only required parameter
 
 FormProvider gives us ability to perform global form setup.
 
-**fieldRenderer** parameter accepts React component to be used for rendering form UI field.
+`fieldRenderer` parameter accepts React component to be used for rendering form UI field.
 
-**crashIfRequiredFieldDoesNotHaveValidator** defines whether form should crash if it contains any fields marked as required but not providing validator function. In most cases it helps more quickly find required inputs without validators during development. Basically **required** field property just marks fields as required (e.g. field renderer can draw asterik near label for these fields). Validator function contains logic defining whether field "empty" or "filled". For example we can think about integer input as empty if its value is 0, but for more complex inputs things may be more complex and ambiguous. That's why we need custom validator here. 
+`crashIfRequiredFieldDoesNotHaveValidator` defines whether form should crash if it contains any fields marked as required but not providing validator function. In most cases it helps more quickly find required inputs without validators during development. Basically `required` field property just marks fields as required (e.g. field renderer can draw asterik near label for these fields). Validator function contains logic defining whether field "empty" or "filled". For example we can think about integer input as empty if its value is 0, but for more complex inputs things may be more complex and ambiguous. That's why we need custom validator here. 
 
-We would recommend always use **FormProvider** component to reduce amount of boilerplate code.
+We would recommend always use `FormProvider` component to reduce amount of boilerplate code.
 
 ## useFormData
 
@@ -93,10 +93,10 @@ This hook is the main library API.
 
 |Name|Type|Description|
 |:---|:----:|:---|
-|isDirty|boolean|form value was changed|
-|isValid|boolean|form is valid|
-|validate|(withFormUpdate = false) => { [key: string]: string }|method for form validation. It returns errors dictionary (if any) or empty object. This function accepts optional boolean parameter **withFormUpdate**. It's false by default. If this parameter is true all errored fields will be highlighted after function execution. We would suggest to use it on form submit to show user all input problems.|
-|reset|(newInitialValue, newErrors) => void|reset form state, optionally new initial value and errors can be provided. **isDirty** flag is set to false. **isValid** is set dependingly on **newErrors** parameter.|
+|isDirty|`boolean`|form value was changed|
+|isValid|`boolean`|form is valid|
+|validate|`(withFormUpdate = false) => { [key: string]: string }`|method for form validation. It returns errors dictionary (if any) or empty object. This function accepts optional boolean parameter **withFormUpdate**. It's false by default. If this parameter is true all errored fields will be highlighted after function execution. We would suggest to use it on form submit to show user all input problems.|
+|reset|`(newInitialValue, newErrors) => void`|reset form state, optionally new initial value and errors can be provided. **isDirty** flag is set to false. **isValid** is set dependingly on **newErrors** parameter.|
 |Field||component to render UI input. It accepts form data field name, input renderer, validator etc. Look for detailed description in the sections below.|
 |Form||Form container component|
 
@@ -111,9 +111,9 @@ This component is the main form field data management piece. Its parameters are 
 |name|**true**|One of the form keys|defines which form data field this UI field should handle|
 |required||boolean|Defines whether this field is required|
 |error||string|Allows to explicitly set form field error|
-|label||ReactNode|Defines input label|
-|input|**true**|component implementing FormInputProps<V, P>|Input component which actually should handle user input. See sections below for more details.|
-|validator||(v,f) => string \| undefined|Optional validator function. Accepts field and form values as arguments. Returns undefined if field is valid, otherwise error string should be returned.|
+|label||`ReactNode`|Defines input label|
+|input|**true**|component implementing `FormInputProps<V, P>`|Input component which actually should handle user input. See sections below for more details.|
+|validator||`(v,f) => string \| undefined`|Optional validator function. Accepts field and form values as arguments. Returns undefined if field is valid, otherwise error string should be returned.|
 |inputProps|**true**|Input specific props dictionary|Each field input accepts FormInputProps, but also can have own specific properties. It's a right place to pass it.|
 
 ## Field input component
@@ -135,7 +135,7 @@ export interface FormInputProps<V, P> {
 }
 ```
 
-As we can see here each form input component is given ass basic necessary data to properly display its state and handle value updates.
+As we can see here each form input component is given all basic necessarry data to properly display its state and handle value updates.
 
 Let's imagine we want to implement check box list input for our form:
 
