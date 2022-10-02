@@ -175,4 +175,4 @@ Footer
 
 ## P.S
 
-Any suggestions are welcomed. Feel free contact me by email andrey.barkanov@gmail.com.
+Any suggestions are welcomed. Feel free to contact me by email andrey.barkanov@gmail.com.
