@@ -1,16 +1,16 @@
 import { RefObject, useCallback } from 'react'
 import { FormErrorsShape, RegisteredField } from '../types'
 
-export type UseValidateReturnValue = {
+export type UseValidateValue = {
   validate: (withUpdate?: boolean) => { [key: string]: string | undefined }
 }
 
 /**
- * Hook returning validate function. Optionally thid function can update
- * from UI during the validation.
+ * Hook returning validate function. Optionally this function can update
+ * form UI during the validation.
  * @param registeredFields - mutable object keeping form fields metadata.
- * @param value - form value
- * @param errors - form errors
+ * @param value - form value.
+ * @param errors - form errors.
  * @param updateErrorsRoutine - routine for updating form errors
  * @returns validate function.
  */
@@ -19,7 +19,7 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
   value: FormShape,
   errors: FormErrorsShape<FormShape>,
   updateErrorsRoutine: (errors: FormErrorsShape<FormShape>) => void
-): UseValidateReturnValue => {
+): UseValidateValue => {
   const validate = useCallback(
     (withFormUpdate?: boolean) => {
       // Errors collector

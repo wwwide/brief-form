@@ -1,5 +1,5 @@
 export * from './FormConfig'
-export * from './FormContextShape'
+export * from './formContextShape'
 export * from './formConfigContextShape'
 export * from './FormFieldProps'
 export * from './FormErrorsShape'

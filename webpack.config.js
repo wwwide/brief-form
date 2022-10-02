@@ -15,7 +15,8 @@ module.exports = (env, argv) => {
     devtool: 'source-map',
     externals: {
       react: 'commonjs react',
-      'react-dom': 'commonjs react-dom'
+      'react-dom': 'commonjs react-dom',
+      'react-query': 'commonjs react-query'
     },
     module: {
       rules: [

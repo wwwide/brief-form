@@ -3,39 +3,12 @@ import { Meta, Story } from '@storybook/react/types-6-0'
 import { Form, FormProvider } from '../components'
 import { FormInputProps, FormFieldProps } from '../types'
 import { useFormData } from '../hooks'
+import { FieldRenderer, FormInput } from '../utils'
 
 export default {
   title: 'Form',
   component: Form
 } as Meta
-
-const FieldRenderer = function <ValueType, InputProps>(props: FormFieldProps<ValueType, InputProps>) {
-  const { label, required, error, children } = props
-
-  return (
-    <div style={{ marginBottom: '20px' }}>
-      {!!label && (
-        <div>
-          {label}
-          {required && <b style={{ color: 'red' }}>*</b>}
-        </div>
-      )}
-      {children}
-      {!!error && (
-        <div>
-          <i>{error}</i>
-        </div>
-      )}
-    </div>
-  )
-}
-
-const Input: FC<FormInputProps<string, any>> = (props) => {
-  const { value, onChange, opts, ...rest } = props
-  console.log(opts)
-
-  return <input {...rest} value={value} onChange={(e) => onChange(e.target.value, undefined)} />
-}
 
 type SampleForm = {
   name: string
@@ -53,14 +26,13 @@ export const BriefFormSample: Story = () => {
             required
             name="name"
             label="Name"
-            input={Input}
+            input={FormInput}
             validator={(v) => (v.length < 3 ? 'Name too short' : undefined)}
             inputProps={{
-              y: false,
-              x: 1
+              testId: ''
             }}
           />
-          <Field required name="age" label="Age" input={Input} inputProps={{}} />
+          <Field required name="age" label="Age" input={FormInput} inputProps={{ testId: '' }} />
           <button
             onClick={() => {
               // eslint-disable-next-line
