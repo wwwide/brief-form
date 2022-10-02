@@ -1,6 +1,6 @@
 # brief-form
 
-**brief-form** is a small React based form management tool. The main paxkage API is useFromData hook which provides all necessary form data and service methods. It provides approach to manage form data but it's not bound to any particular UI implementation, so library can be used in web React apps or in the React Native applications.
+**brief-form** is a small React based form management tool. The main package API is useFromData hook which provides all necessary form data and service methods. It provides approach to manage form data but it's not bound to any particular UI implementation, so library can be used in web React apps or in the React Native applications.
 
 ## Quick usage example
 
