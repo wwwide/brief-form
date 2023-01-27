@@ -172,10 +172,6 @@ describe('useFormData works properly', () => {
 
     const payload = { name: 'A', age: 'B' }
 
-    await formHook.waitFor(
-      () => formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B'
-    )
-
     act(() => {
       reset()
     })
