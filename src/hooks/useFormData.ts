@@ -9,7 +9,7 @@ export type UseFormDataReturnType<FormShape> = {
   config: FormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
-  validate: (withFormUpdate?: boolean) => { [key: string]: string | undefined }
+  validate: (withFormUpdate?: boolean) => { valid: boolean; errors: { [key: string]: string | undefined } }
   reset: (initialValue?: FormShape, errors?: FormErrorsShape<FormShape>) => void
   Form: <FormShape extends { [key: string]: any }>(props: FormProps<FormShape>) => ReactElement
   Field: <Input extends ComponentType<FormInputProps<any, any>>>(props: FieldProps<Input, FormShape>) => JSX.Element

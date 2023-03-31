@@ -2,7 +2,10 @@ import { RefObject, useCallback } from 'react'
 import { FormErrorsShape, RegisteredField } from '../types'
 
 export type UseValidateValue = {
-  validate: (withUpdate?: boolean) => { [key: string]: string | undefined }
+  validate: (withUpdate?: boolean) => {
+    valid: boolean
+    errors: { [key: string]: string | undefined }
+  }
 }
 
 /**
@@ -51,7 +54,10 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
         updateErrorsRoutine({ ...errors, ...result })
       }
 
-      return result
+      return {
+        errors: result,
+        valid: !Object.values(result).filter((v) => !!v).length
+      }
     },
     [registeredFields, value, updateErrorsRoutine, errors]
   )

@@ -223,6 +223,7 @@ describe('useFormData works properly', () => {
 
     const errors3 = validate()
 
-    expect(errors3.age).toEqual('Not ideal')
+    expect(errors3.errors.age).toEqual('Not ideal')
+    expect(errors3.valid).toEqual(false)
   })
 })
