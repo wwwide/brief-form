@@ -12,4 +12,5 @@ export interface FormFieldProps<ValueType, InputProps> {
   error?: string
   required?: boolean
   inputProps?: InputProps
+  triggerValidatorBy?: (keyof ValueType)[]
 }

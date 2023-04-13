@@ -15,8 +15,13 @@ type MyForm = {
 }
 
 const InitialValue: MyForm = {
-  name: 'Andrey',
+  name: 'Andre',
   age: '18'
+}
+
+const InitialValue2: MyForm = {
+  name: 'Andre',
+  age: '37'
 }
 
 const InitialErrors = { age: 'Too old!' }
@@ -150,6 +155,7 @@ describe('useFormData works properly', () => {
             input={FormInput}
             validator={(v) => (v === '18' ? undefined : 'Not ideal')}
             inputProps={{ testId: 'age' }}
+            triggerValidatorBy={['name']}
           />
           <button data-testid="button">ok</button>
         </Form>
@@ -225,5 +231,48 @@ describe('useFormData works properly', () => {
 
     expect(errors3.errors.age).toEqual('Not ideal')
     expect(errors3.valid).toEqual(false)
+  })
+
+  test('Validation of dependent fields works correctly', async () => {
+    const formHook = renderHook(() => useFormData<MyForm>(InitialValue2, InitialErrors), {
+      wrapper: ReactQueryWrapper
+    })
+
+    await formHook.waitFor(() => !!formHook.result.current)
+
+    const { Form, Field, config } = formHook.result.current
+
+    const form = render(
+      <FormProvider crashIfRequiredFieldDoesNotHaveValidator fieldRenderer={FieldRenderer}>
+        <Form config={config}>
+          <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
+          <Field
+            required
+            name="age"
+            label="Age"
+            input={FormInput}
+            validator={(v, f) => (v === '37' && f.name === 'Andrey' ? 'How did you find me?' : undefined)}
+            inputProps={{ testId: 'age' }}
+            triggerValidatorBy={['name']}
+          />
+          <button data-testid="button">ok</button>
+        </Form>
+      </FormProvider>
+    )
+
+    const nameField = form.getByTestId('name') as HTMLInputElement
+
+    await act(async () => {
+      await userEvent.type(nameField, 'y')
+    })
+
+    await formHook.waitFor(() => formHook.result.current.config.value.name === 'Andrey')
+    expect(formHook.result.current.config.errors.age).toEqual('How did you find me?')
+
+    await act(async () => {
+      await userEvent.type(nameField, 'x')
+    })
+
+    expect(formHook.result.current.config.errors.age).toEqual(undefined)
   })
 })

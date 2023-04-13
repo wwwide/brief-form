@@ -47,12 +47,40 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   const { validate } = useValidate<FormShape>(registeredFields, value, errors, setErrors)
 
   const onChange = useCallback(
-    (value: FormShape, errors: FormErrorsShape<FormShape>) => {
-      setValue(value)
-      setErrors(errors)
-      setDirty(!isEqual(initialValue, value))
+    (newValue: FormShape, errors: FormErrorsShape<FormShape>) => {
+      setValue(newValue)
+
+      /************************************************************/
+
+      // 1. Collect all form fields which were updated.
+      const updatedKeys = Object.keys(newValue).filter((key) => !isEqual(newValue[key], value[key]))
+
+      // 2. Find fields which should be re-validated when some of fields from step 1 are updated.
+      const fieldsToBeRevalidated = Object.keys(registeredFields.current).filter((key) =>
+        registeredFields.current[key].triggerValidatorBy?.some((i) => updatedKeys.includes(i.toString()))
+      )
+
+      // 3. Combine existing errors with errors from re-validated dependent fields.
+      const newErrors = fieldsToBeRevalidated.reduce(
+        (p, c) => ({
+          ...p,
+          [c]: (() => {
+            const validator = registeredFields.current[c].validator
+            if (validator) {
+              return validator(newValue[c], newValue)
+            }
+            return errors[c]
+          })()
+        }),
+        errors
+      )
+
+      /************************************************************/
+
+      setErrors(newErrors)
+      setDirty(!isEqual(initialValue, newValue))
     },
-    [initialValue]
+    [initialValue, value]
   )
 
   const isValid = !Object.values(validate()).filter((i) => !!i).length

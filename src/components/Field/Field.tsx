@@ -6,7 +6,7 @@ import { FieldProps, $ElementProps } from './FieldProps'
 export const Field = function <FormShape, Input extends ComponentType<FormInputProps<any, any>>>(
   props: FieldProps<Input, FormShape>
 ): ReactElement {
-  const { name, input, label, error, required, inputProps, validator } = props
+  const { name, input, label, error, required, inputProps, validator, triggerValidatorBy } = props
   const { crashIfRequiredFieldDoesNotHaveValidator } = useContext(FormConfigContext)
 
   const {
@@ -24,7 +24,8 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
     if (registeredFields.current) {
       if (!registeredFields.current[name]) {
         registeredFields.current[name] = {
-          validator
+          validator,
+          triggerValidatorBy
         }
       }
     }
@@ -35,6 +36,10 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
       }
     }
   }, [name, validator])
+
+  if ((triggerValidatorBy || []).indexOf(name) !== -1) {
+    throw new Error('Field cannot contain itself in "triggerValidatorBy" array.')
+  }
 
   if (Object.keys(value).indexOf(String(name)) === -1) {
     throw new Error(`Field with name "${String(name)}" doesn't present in form value object.`)

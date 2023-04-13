@@ -16,4 +16,5 @@ export interface FieldProps<Input extends ComponentType<FormInputProps<any, any>
   input: Input
   validator?: (v: $ElementProps<Input>['value'], f: FormShape) => string | undefined
   inputProps: $ElementProps<Input>['opts']
+  triggerValidatorBy?: (keyof FormShape)[]
 }
