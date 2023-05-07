@@ -56,9 +56,10 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
       const updatedKeys = Object.keys(newValue).filter((key) => !isEqual(newValue[key], value[key]))
 
       // 2. Find fields which should be re-validated when some of fields from step 1 are updated.
-      const fieldsToBeRevalidated = Object.keys(registeredFields.current).filter((key) =>
-        registeredFields.current[key].triggerValidatorBy?.some((i) => updatedKeys.includes(i.toString()))
-      )
+      const fieldsToBeRevalidated = Object.keys(registeredFields.current).filter((key) => {
+        const fieldMeta = registeredFields.current[key]
+        return fieldMeta?.triggerValidatorBy?.some((i) => updatedKeys.includes(i.toString()))
+      })
 
       // 3. Combine existing errors with errors from re-validated dependent fields.
       const newErrors = fieldsToBeRevalidated.reduce(
