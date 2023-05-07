@@ -83,7 +83,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     [initialValue, value]
   )
 
-  const isValid = validate().valid
+  const isValid = !Object.values(errors).filter((v) => !!v).length
 
   return {
     isDirty,
