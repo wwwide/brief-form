@@ -73,7 +73,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
 
       onChange({ ...value, [name]: v }, finalErrors)
     },
-    [validator, value, name]
+    [validator, value, name, safeErrors]
   )
 
   return (
