@@ -28,9 +28,12 @@ const InitialErrors = { age: 'Too old!' }
 
 describe('useFormData works properly', () => {
   test('Check initial data returned by hook', async () => {
-    const formHook = renderHook(() => useFormData<MyForm>(InitialValue, InitialErrors), {
-      wrapper: ReactQueryWrapper
-    })
+    const formHook = renderHook(
+      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
+      {
+        wrapper: ReactQueryWrapper
+      }
+    )
     await formHook.waitFor(() => !!formHook.result.current)
 
     // Form initially is not dirty
@@ -53,9 +56,12 @@ describe('useFormData works properly', () => {
   })
 
   test('Check initial data returned by hook with rendered form', async () => {
-    const formHook = renderHook(() => useFormData<MyForm>(InitialValue, InitialErrors), {
-      wrapper: ReactQueryWrapper
-    })
+    const formHook = renderHook(
+      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
+      {
+        wrapper: ReactQueryWrapper
+      }
+    )
 
     await formHook.waitFor(() => !!formHook.result.current)
 
@@ -87,9 +93,12 @@ describe('useFormData works properly', () => {
   })
 
   test('Check how onChange and field validators work', async () => {
-    const formHook = renderHook(() => useFormData<MyForm>(InitialValue, InitialErrors), {
-      wrapper: ReactQueryWrapper
-    })
+    const formHook = renderHook(
+      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
+      {
+        wrapper: ReactQueryWrapper
+      }
+    )
 
     await formHook.waitFor(() => !!formHook.result.current)
 
@@ -135,9 +144,12 @@ describe('useFormData works properly', () => {
   })
 
   test('"reset" and "validate" methods work as expected', async () => {
-    const formHook = renderHook(() => useFormData<MyForm>(InitialValue, InitialErrors), {
-      wrapper: ReactQueryWrapper
-    })
+    const formHook = renderHook(
+      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
+      {
+        wrapper: ReactQueryWrapper
+      }
+    )
 
     await formHook.waitFor(() => !!formHook.result.current)
 
@@ -234,9 +246,12 @@ describe('useFormData works properly', () => {
   })
 
   test('Validation of dependent fields works correctly', async () => {
-    const formHook = renderHook(() => useFormData<MyForm>(InitialValue2, InitialErrors), {
-      wrapper: ReactQueryWrapper
-    })
+    const formHook = renderHook(
+      () => useFormData<MyForm>({ initialValue: InitialValue2, initialErrors: InitialErrors }),
+      {
+        wrapper: ReactQueryWrapper
+      }
+    )
 
     await formHook.waitFor(() => !!formHook.result.current)
 
@@ -274,5 +289,39 @@ describe('useFormData works properly', () => {
     })
 
     expect(formHook.result.current.config.errors.age).toEqual(undefined)
+  })
+
+  test('Optional onFormChanged callback called with proper arguments', async () => {
+    const mockChanged = jest.fn((v: any, e: any) => {})
+
+    const formHook = renderHook(
+      () =>
+        useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors, onFormChanged: mockChanged }),
+      {
+        wrapper: ReactQueryWrapper
+      }
+    )
+
+    await formHook.waitFor(() => !!formHook.result.current)
+
+    const { Form, Field, config } = formHook.result.current
+
+    const form = render(
+      <FormProvider crashIfRequiredFieldDoesNotHaveValidator fieldRenderer={FieldRenderer}>
+        <Form config={config}>
+          <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
+          <button data-testid="button">ok</button>
+        </Form>
+      </FormProvider>
+    )
+
+    const nameField = form.getByTestId('name') as HTMLInputElement
+
+    await act(async () => {
+      await userEvent.type(nameField, 'y')
+    })
+
+    expect(mockChanged.mock.calls).toHaveLength(1)
+    expect(mockChanged.mock.calls[0][0]).toStrictEqual({ ...InitialValue, name: 'Andrey' })
   })
 })

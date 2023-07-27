@@ -15,10 +15,16 @@ export type UseFormDataReturnType<FormShape> = {
   Field: <Input extends ComponentType<FormInputProps<any, any>>>(props: FieldProps<Input, FormShape>) => JSX.Element
 }
 
-export const useFormData = <FormShape extends { [key: string]: any }>(
-  initialValue: FormShape,
+export type UseFormDataOpts<FormShape extends { [key: string]: any }> = {
+  initialValue: FormShape
   initialErrors?: FormErrorsShape<FormShape>
+  onFormChanged?: (value: FormShape, errors: FormErrorsShape<FormShape>) => void
+}
+
+export const useFormData = <FormShape extends { [key: string]: any }>(
+  opts: UseFormDataOpts<FormShape>
 ): UseFormDataReturnType<FormShape> => {
+  const { initialValue, initialErrors, onFormChanged } = opts
   const { Field } = useFieldComponent<FormShape>()
   const [savedInitialvalue, setSavedInitialValue] = useState<FormShape>(initialValue)
   const [value, setValue] = useState<FormShape>(initialValue)
@@ -36,8 +42,12 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
       setValue(initialValue || savedInitialvalue)
       setDirty(false)
       setErrors(errors || ({} as any))
+
+      if (onFormChanged) {
+        onFormChanged(initialValue || savedInitialvalue, errors || ({} as any))
+      }
     },
-    [savedInitialvalue, setValue, setDirty, setErrors, setSavedInitialValue]
+    [savedInitialvalue, setValue, setDirty, setErrors, setSavedInitialValue, onFormChanged]
   )
 
   const registeredFields = useRef<{ [key in keyof FormShape]: RegisteredField<FormShape> }>(
@@ -80,8 +90,12 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
 
       setErrors(newErrors)
       setDirty(!isEqual(initialValue, newValue))
+
+      if (onFormChanged) {
+        onFormChanged(newValue, newErrors)
+      }
     },
-    [initialValue, value]
+    [initialValue, value, onFormChanged]
   )
 
   const isValid = !Object.values(errors).filter((v) => !!v).length
