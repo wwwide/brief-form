@@ -1,4 +1,4 @@
-import { useCallback, useState, useRef, ComponentType, ReactElement } from 'react'
+import { useCallback, useState, useRef, ComponentType, ReactElement, useMemo } from 'react'
 import isEqual from 'lodash.isequal'
 import { FormConfig, FormErrorsShape, RegisteredField, FormInputProps } from '../types'
 import { useValidate } from './useValidate'
@@ -100,18 +100,22 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
 
   const isValid = !Object.values(errors).filter((v) => !!v).length
 
-  return {
-    isDirty,
-    isValid,
-    validate,
-    reset,
-    Field,
-    Form,
-    config: {
-      value,
-      errors,
-      onChange,
-      registeredFields
+  const result = useMemo(() => {
+    return {
+      isDirty,
+      isValid,
+      validate,
+      reset,
+      Field,
+      Form,
+      config: {
+        value,
+        errors,
+        onChange,
+        registeredFields
+      }
     }
-  }
+  }, [isDirty, isValid, validate, reset, Field, Form, value, errors, onChange, registeredFields])
+
+  return result
 }
