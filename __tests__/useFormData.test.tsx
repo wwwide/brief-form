@@ -1,11 +1,10 @@
 import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import userEvent from '@testing-library/user-event'
-import { render } from '@testing-library/react'
-import { renderHook } from '@testing-library/react-hooks'
+import { render, renderHook, waitFor } from '@testing-library/react'
 import { FormProvider } from '../src'
 import { useFormData } from '../src/hooks'
-import { ReactQueryWrapper, FormInput, FieldRenderer } from '../src/utils'
+import { FormInput, FieldRenderer } from '../src/utils'
 
 const { act } = TestRenderer
 
@@ -29,12 +28,9 @@ const InitialErrors = { age: 'Too old!' }
 describe('useFormData works properly', () => {
   test('Check initial data returned by hook', async () => {
     const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
-      {
-        wrapper: ReactQueryWrapper
-      }
+      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors })
     )
-    await formHook.waitFor(() => !!formHook.result.current)
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     // Form initially is not dirty
     expect(formHook.result.current.isDirty).toBeFalsy()
@@ -57,13 +53,10 @@ describe('useFormData works properly', () => {
 
   test('Check initial data returned by hook with rendered form', async () => {
     const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
-      {
-        wrapper: ReactQueryWrapper
-      }
+      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors })
     )
 
-    await formHook.waitFor(() => !!formHook.result.current)
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     const { Field, Form, config } = formHook.result.current
 
@@ -95,12 +88,9 @@ describe('useFormData works properly', () => {
   test('Check how onChange and field validators work', async () => {
     const formHook = renderHook(
       () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
-      {
-        wrapper: ReactQueryWrapper
-      }
     )
 
-    await formHook.waitFor(() => !!formHook.result.current)
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     const { Field, Form, config } = formHook.result.current
 
@@ -128,7 +118,7 @@ describe('useFormData works properly', () => {
       await userEvent.type(ageField, '3')
     })
 
-    await formHook.waitFor(() => formHook.result.current.config.value.age === '183')
+    await waitFor(() => expect(formHook.result.current.config.value.age).toEqual('183'))
 
     // Check that age value is updated
     expect(formHook.result.current.config.value.age).toBe('183')
@@ -146,12 +136,9 @@ describe('useFormData works properly', () => {
   test('"reset" and "validate" methods work as expected', async () => {
     const formHook = renderHook(
       () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
-      {
-        wrapper: ReactQueryWrapper
-      }
     )
 
-    await formHook.waitFor(() => !!formHook.result.current)
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     const { Form, Field, config } = formHook.result.current
 
@@ -180,7 +167,7 @@ describe('useFormData works properly', () => {
       await userEvent.type(ageField, '3')
     })
 
-    await formHook.waitFor(() => formHook.result.current.config.value.age === '183')
+    await waitFor(() => expect(formHook.result.current.config.value.age).toEqual('183'))
 
     const {
       config: { onChange, errors },
@@ -194,10 +181,10 @@ describe('useFormData works properly', () => {
       reset()
     })
 
-    await formHook.waitFor(
+    await waitFor(
       () =>
-        formHook.result.current.config.value.name === InitialValue.name &&
-        formHook.result.current.config.value.age == InitialValue.age
+        expect(formHook.result.current.config.value.name === InitialValue.name &&
+          formHook.result.current.config.value.age == InitialValue.age).toBeTruthy()
     )
 
     // Form value is equal to initial now
@@ -208,8 +195,8 @@ describe('useFormData works properly', () => {
       onChange(payload, errors)
     })
 
-    await formHook.waitFor(
-      () => formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B'
+    await waitFor(
+      () => expect(formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B').toBeTruthy()
     )
 
     const payload2 = { name: 'C', age: 'D' }
@@ -219,10 +206,9 @@ describe('useFormData works properly', () => {
       reset(payload2, errors2)
     })
 
-    await formHook.waitFor(
-      () =>
-        formHook.result.current.config.value.name === payload2.name &&
-        formHook.result.current.config.value.age == payload2.age
+    await waitFor(
+      () =>expect(formHook.result.current.config.value.name === payload2.name &&
+        formHook.result.current.config.value.age == payload2.age).toBeTruthy()
     )
 
     // Form value is equal to payload2 and errors are equal to errors2
@@ -235,8 +221,8 @@ describe('useFormData works properly', () => {
       onChange(payload, errors)
     })
 
-    await formHook.waitFor(
-      () => formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B'
+    await waitFor(
+      () => expect(formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B').toBeTruthy()
     )
 
     const errors3 = validate()
@@ -247,13 +233,10 @@ describe('useFormData works properly', () => {
 
   test('Validation of dependent fields works correctly', async () => {
     const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue2, initialErrors: InitialErrors }),
-      {
-        wrapper: ReactQueryWrapper
-      }
+      () => useFormData<MyForm>({ initialValue: InitialValue2, initialErrors: InitialErrors })
     )
 
-    await formHook.waitFor(() => !!formHook.result.current)
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     const { Form, Field, config } = formHook.result.current
 
@@ -281,7 +264,7 @@ describe('useFormData works properly', () => {
       await userEvent.type(nameField, 'y')
     })
 
-    await formHook.waitFor(() => formHook.result.current.config.value.name === 'Andrey')
+    await waitFor(() => expect(formHook.result.current.config.value.name).toEqual('Andrey'))
     expect(formHook.result.current.config.errors.age).toEqual('How did you find me?')
 
     await act(async () => {
@@ -297,12 +280,9 @@ describe('useFormData works properly', () => {
     const formHook = renderHook(
       () =>
         useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors, onFormChanged: mockChanged }),
-      {
-        wrapper: ReactQueryWrapper
-      }
     )
 
-    await formHook.waitFor(() => !!formHook.result.current)
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     const { Form, Field, config } = formHook.result.current
 

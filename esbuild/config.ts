@@ -14,5 +14,5 @@ export const buildConfig = (): BuildOptions => ({
   loader: {
     '.js': 'jsx'
   },
-  external: ['react', 'react-dom', 'react-query']
+  external: ['react', 'react-dom']
 })
