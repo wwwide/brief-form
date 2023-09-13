@@ -82,6 +82,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
         opts={inputProps as unknown as $ElementProps<Input>['opts']}
         required={required}
         value={value[name] as unknown as $ElementProps<Input>['value']}
+        label={label}
         error={safeErrors[name]}
         onChange={onFormInputChange}
       />
