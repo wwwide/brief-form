@@ -6,7 +6,7 @@ import { ReactNode } from 'react'
 export interface FormInputProps<V, P> {
   opts: P
   value: V
-  label: ReactNode
+  label?: ReactNode
   onChange: (value: V, error?: string) => void
   error?: string
   required?: boolean
