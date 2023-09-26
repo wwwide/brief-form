@@ -1,6 +1,6 @@
 {
   "name": "brief-form",
-  "version": "4.1.1",
+  "version": "4.1.2",
   "main": "./dist/index.js",
   "scripts": {
     "lint": "TIMING=1 ./node_modules/eslint/bin/eslint.js --max-warnings=0 ./src/index.ts",
@@ -13,9 +13,10 @@
   "author": "Andrey Barkanov",
   "license": "MIT",
   "dependencies": {
+    "@mui/icons-material": "^5.14.9",
     "lodash.isequal": "^4.5.0",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@statoscope/ui-webpack": "^5.27.0",

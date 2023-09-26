@@ -1,4 +1,4 @@
-import React, { ComponentType, useContext, useEffect, useCallback, ReactElement } from 'react'
+import React, { ComponentType, useContext, useEffect, useCallback, ReactElement, useRef } from 'react'
 import { FormContextShape, FormInputProps } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
 import { FieldProps, $ElementProps } from './FieldProps'
@@ -8,6 +8,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator, triggerValidatorBy } = props
   const { crashIfRequiredFieldDoesNotHaveValidator } = useContext(FormConfigContext)
+  const ref = useRef<any>()
 
   const {
     value,
@@ -25,7 +26,8 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
       if (!registeredFields.current[name]) {
         registeredFields.current[name] = {
           validator,
-          triggerValidatorBy
+          triggerValidatorBy,
+          ref
         }
       }
     }
@@ -35,7 +37,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
         delete registeredFields.current[name]
       }
     }
-  }, [name, validator])
+  }, [name, validator, ref])
 
   if ((triggerValidatorBy || []).indexOf(name) !== -1) {
     throw new Error('Field cannot contain itself in "triggerValidatorBy" array.')
@@ -77,7 +79,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
   )
 
   return (
-    <FR error={error || errors[name]} required={required} label={label} name={String(name)}>
+    <FR error={error || errors[name]} required={required} label={label} name={String(name)} containerRef={ref}>
       <Input
         opts={inputProps as unknown as $ElementProps<Input>['opts']}
         required={required}

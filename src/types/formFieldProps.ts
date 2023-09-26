@@ -1,4 +1,4 @@
-import { ReactNode, ReactElement } from 'react'
+import { ReactNode, ReactElement, MutableRefObject } from 'react'
 import { FormInputProps } from './FormInputProps'
 
 /**
@@ -8,6 +8,7 @@ import { FormInputProps } from './FormInputProps'
 export interface FormFieldProps<ValueType, InputProps> {
   children: ReactElement<FormInputProps<ValueType, InputProps>>
   name: string
+  containerRef: MutableRefObject<any>
   label?: ReactNode
   error?: string
   required?: boolean
