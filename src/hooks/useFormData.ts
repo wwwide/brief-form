@@ -1,6 +1,13 @@
 import { useCallback, useState, useRef, ComponentType, ReactElement, useMemo } from 'react'
 import isEqual from 'lodash.isequal'
-import { FormConfig, FormErrorsShape, RegisteredField, FormInputProps } from '../types'
+import {
+  FormConfig,
+  FormErrorsShape,
+  RegisteredField,
+  FormInputProps,
+  BeforeFormChangeHandler,
+  FormChangeHandler
+} from '../types'
 import { useValidate } from './useValidate'
 import { useFieldComponent } from './useFieldComponent'
 import { FieldProps, Form, FormProps } from '../components'
@@ -18,13 +25,14 @@ export type UseFormDataReturnType<FormShape> = {
 export type UseFormDataOpts<FormShape extends { [key: string]: any }> = {
   initialValue: FormShape
   initialErrors?: FormErrorsShape<FormShape>
-  onFormChanged?: (value: FormShape, errors: FormErrorsShape<FormShape>) => void
+  onBeforeChange?: BeforeFormChangeHandler<FormShape>
+  onFormChanged?: (value: FormShape | undefined, errors: FormErrorsShape<FormShape>) => void
 }
 
 export const useFormData = <FormShape extends { [key: string]: any }>(
   opts: UseFormDataOpts<FormShape>
 ): UseFormDataReturnType<FormShape> => {
-  const { initialValue, initialErrors, onFormChanged } = opts
+  const { initialValue, initialErrors, onFormChanged, onBeforeChange } = opts
   const { Field } = useFieldComponent<FormShape>()
   const [savedInitialvalue, setSavedInitialValue] = useState<FormShape>(initialValue)
   const [value, setValue] = useState<FormShape>(initialValue)
@@ -56,8 +64,8 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
 
   const { validate } = useValidate<FormShape>(registeredFields, value, errors, setErrors)
 
-  const onChange = useCallback(
-    (newValue: FormShape | undefined, errors: FormErrorsShape<FormShape>) => {
+  const baseChangeHandler: FormChangeHandler<FormShape> = useCallback(
+    (newValue, errors) => {
       if (newValue) {
         setValue(newValue)
       }
@@ -110,7 +118,18 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
         onFormChanged(newValue, newErrors)
       }
     },
-    [initialValue, value, onFormChanged]
+    [initialValue, value, onFormChanged, onBeforeChange]
+  )
+
+  const onChange: FormChangeHandler<FormShape> = useCallback(
+    (value, errors) => {
+      if (onBeforeChange) {
+        const transformed = onBeforeChange(value, errors)
+        baseChangeHandler(transformed.value, transformed.errors)
+      }
+      baseChangeHandler(value, errors)
+    },
+    [baseChangeHandler, onBeforeChange]
   )
 
   const isValid = !Object.values(errors).filter((v) => !!v).length
