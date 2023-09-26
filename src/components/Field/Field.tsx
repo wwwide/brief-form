@@ -1,5 +1,5 @@
 import React, { ComponentType, useContext, useEffect, useCallback, ReactElement, useRef } from 'react'
-import { FormContextShape, FormInputProps } from '../../types'
+import { FormContextValue, FormInputProps } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
 import { FieldProps, $ElementProps } from './FieldProps'
 
@@ -16,7 +16,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
     onChange,
     fieldRenderer: FR,
     registeredFields
-  } = useContext<FormContextShape<FormShape>>(FormContext)
+  } = useContext<FormContextValue<FormShape>>(FormContext)
 
   const Input: any = input
   const safeErrors = errors || {}

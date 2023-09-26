@@ -10,7 +10,7 @@ import { RegisteredField, FormFieldProps } from '.'
  * 4. fieldRenderer - component used to draw UI (label, input, error)
  * 5. registeredFields - mutable object keeping metadata for every form field
  */
-export type FormContextShape<FormShape> = {
+export type FormContextValue<FormShape> = {
   value: FormShape
   errors: FormErrorsShape<FormShape>
   onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void

@@ -1,7 +1,7 @@
 import { createContext, createRef } from 'react'
-import { FormContextShape } from '../types'
+import { FormContextValue } from '../types'
 
-export const FormContext = createContext<FormContextShape<any>>({
+export const FormContext = createContext<FormContextValue<any>>({
   value: {},
   errors: {},
   fieldRenderer: () => {
