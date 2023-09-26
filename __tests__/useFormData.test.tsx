@@ -27,9 +27,7 @@ const InitialErrors = { age: 'Too old!' }
 
 describe('useFormData works properly', () => {
   test('Check initial data returned by hook', async () => {
-    const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors })
-    )
+    const formHook = renderHook(() => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }))
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
     // Form initially is not dirty
@@ -52,9 +50,7 @@ describe('useFormData works properly', () => {
   })
 
   test('Check initial data returned by hook with rendered form', async () => {
-    const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors })
-    )
+    const formHook = renderHook(() => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }))
 
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
@@ -86,9 +82,7 @@ describe('useFormData works properly', () => {
   })
 
   test('Check how onChange and field validators work', async () => {
-    const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
-    )
+    const formHook = renderHook(() => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }))
 
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
@@ -134,9 +128,7 @@ describe('useFormData works properly', () => {
   })
 
   test('"reset" and "validate" methods work as expected', async () => {
-    const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }),
-    )
+    const formHook = renderHook(() => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }))
 
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
@@ -171,20 +163,21 @@ describe('useFormData works properly', () => {
 
     const {
       config: { onChange, errors },
-      reset,
+      set,
       validate
     } = formHook.result.current
 
     const payload = { name: 'A', age: 'B' }
 
     act(() => {
-      reset()
+      set({ reset: true })
     })
 
-    await waitFor(
-      () =>
-        expect(formHook.result.current.config.value.name === InitialValue.name &&
-          formHook.result.current.config.value.age == InitialValue.age).toBeTruthy()
+    await waitFor(() =>
+      expect(
+        formHook.result.current.config.value.name === InitialValue.name &&
+          formHook.result.current.config.value.age == InitialValue.age
+      ).toBeTruthy()
     )
 
     // Form value is equal to initial now
@@ -195,20 +188,24 @@ describe('useFormData works properly', () => {
       onChange(payload, errors)
     })
 
-    await waitFor(
-      () => expect(formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B').toBeTruthy()
+    await waitFor(() =>
+      expect(
+        formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B'
+      ).toBeTruthy()
     )
 
     const payload2 = { name: 'C', age: 'D' }
     const errors2 = { name: 'error1', age: 'error2' }
 
     act(() => {
-      reset(payload2, errors2)
+      set({ value: payload2, errors: errors2, reset: true })
     })
 
-    await waitFor(
-      () =>expect(formHook.result.current.config.value.name === payload2.name &&
-        formHook.result.current.config.value.age == payload2.age).toBeTruthy()
+    await waitFor(() =>
+      expect(
+        formHook.result.current.config.value.name === payload2.name &&
+          formHook.result.current.config.value.age == payload2.age
+      ).toBeTruthy()
     )
 
     // Form value is equal to payload2 and errors are equal to errors2
@@ -221,8 +218,10 @@ describe('useFormData works properly', () => {
       onChange(payload, errors)
     })
 
-    await waitFor(
-      () => expect(formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B').toBeTruthy()
+    await waitFor(() =>
+      expect(
+        formHook.result.current.config.value.name == 'A' && formHook.result.current.config.value.age == 'B'
+      ).toBeTruthy()
     )
 
     const errors3 = validate()
@@ -232,8 +231,8 @@ describe('useFormData works properly', () => {
   })
 
   test('Validation of dependent fields works correctly', async () => {
-    const formHook = renderHook(
-      () => useFormData<MyForm>({ initialValue: InitialValue2, initialErrors: InitialErrors })
+    const formHook = renderHook(() =>
+      useFormData<MyForm>({ initialValue: InitialValue2, initialErrors: InitialErrors })
     )
 
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
@@ -277,9 +276,8 @@ describe('useFormData works properly', () => {
   test('Optional onFormChanged callback called with proper arguments', async () => {
     const mockChanged = jest.fn((v: any, e: any) => {})
 
-    const formHook = renderHook(
-      () =>
-        useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors, onFormChanged: mockChanged }),
+    const formHook = renderHook(() =>
+      useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors, onFormChanged: mockChanged })
     )
 
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
