@@ -57,41 +57,56 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   const { validate } = useValidate<FormShape>(registeredFields, value, errors, setErrors)
 
   const onChange = useCallback(
-    (newValue: FormShape, errors: FormErrorsShape<FormShape>) => {
-      setValue(newValue)
+    (newValue: FormShape | undefined, errors: FormErrorsShape<FormShape>) => {
+      if (newValue) {
+        setValue(newValue)
+      }
 
       /************************************************************/
 
-      // 1. Collect all form fields which were updated.
-      const updatedKeys = Object.keys(newValue).filter((key) => !isEqual(newValue[key], value[key]))
+      /**
+       * 1. Collect all form fields which were updated.
+       *    If new value is undefined, it means that we don't want to change form
+       *    value, but only form errors. So in this case we won't have any updated keys.
+       */
+      const updatedKeys = newValue ? Object.keys(newValue).filter((key) => !isEqual(newValue[key], value[key])) : []
 
-      // 2. Find fields which should be re-validated when some of fields from step 1 are updated.
+      /**
+       * 2. Find fields which should be re-validated when some of fields from step 1 are updated.
+       *    If new form value us undefined, as described in the paragraph one, no fields
+       *    will be re-validated.
+       */
       const fieldsToBeRevalidated = Object.keys(registeredFields.current).filter((key) => {
         const fieldMeta = registeredFields.current[key]
         return fieldMeta?.triggerValidatorBy?.some((i) => updatedKeys.includes(i.toString()))
       })
 
-      // 3. Combine existing errors with errors from re-validated dependent fields.
-      const newErrors = fieldsToBeRevalidated.reduce(
-        (p, c) => ({
-          ...p,
-          [c]: (() => {
-            const validator = registeredFields.current[c].validator
-            if (validator) {
-              return validator(newValue[c], newValue)
-            }
-            return errors[c]
-          })()
-        }),
-        errors
-      )
+      /**
+       * 3. Combine existing errors with errors from re-validated dependent fields.
+       *    If we don't pass new form value, new errors are just errors provided in the function argument.
+       */
+      const newErrors = newValue
+        ? fieldsToBeRevalidated.reduce(
+            (p, c) => ({
+              ...p,
+              [c]: (() => {
+                const validator = registeredFields.current[c].validator
+                if (validator) {
+                  return validator(newValue[c], newValue)
+                }
+                return errors[c]
+              })()
+            }),
+            errors
+          )
+        : errors
 
       /************************************************************/
 
       setErrors(newErrors)
-      setDirty(!isEqual(initialValue, newValue))
+      setDirty(newValue ? !isEqual(initialValue, newValue) : false)
 
-      if (onFormChanged) {
+      if (onFormChanged && newValue) {
         onFormChanged(newValue, newErrors)
       }
     },
