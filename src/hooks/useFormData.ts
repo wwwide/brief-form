@@ -47,6 +47,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     setDirty,
     registeredFields,
     onFormChanged,
+    onBeforeChange,
     oldValue: value,
     oldErrors: errors,
     initialErrors: safeInitialErrors,
@@ -67,7 +68,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     (value, errors) => {
       baseChangeHandler({ value, errors })
     },
-    [baseChangeHandler, onBeforeChange]
+    [baseChangeHandler]
   )
 
   const isValid = !Object.values(errors).filter((v) => !!v).length

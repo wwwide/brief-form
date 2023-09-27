@@ -2,7 +2,7 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import userEvent from '@testing-library/user-event'
 import { render, renderHook, waitFor } from '@testing-library/react'
-import { FormProvider } from '../src'
+import { FormErrorsShape, FormProvider } from '../src'
 import { useFormData } from '../src/hooks'
 import { FormInput, FieldRenderer } from '../src/utils'
 
@@ -301,5 +301,54 @@ describe('useFormData works properly', () => {
 
     expect(mockChanged.mock.calls).toHaveLength(1)
     expect(mockChanged.mock.calls[0][0]).toStrictEqual({ ...InitialValue, name: 'Andrey' })
+  })
+
+  test('Optional onBeforeChange callback called with proper arguments and transforms value and errors as expected', async () => {
+    const mockBeforeChange = jest.fn((value: MyForm, errors: FormErrorsShape<MyForm>) => {
+      const valueCopy = { ...value }
+      const errorsCopy = { ...errors }
+
+      if (valueCopy.name === 'Andrey') {
+        valueCopy.name = 'Andrey Barkanov'
+        errorsCopy.age = 'Too young'
+      }
+
+      return { value: valueCopy, errors: errorsCopy }
+    })
+
+    const formHook = renderHook(() =>
+      useFormData<MyForm>({
+        initialValue: InitialValue,
+        initialErrors: InitialErrors,
+        onBeforeChange: mockBeforeChange
+      })
+    )
+
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
+
+    const { Form, Field, config } = formHook.result.current
+
+    const form = render(
+      <FormProvider crashIfRequiredFieldDoesNotHaveValidator fieldRenderer={FieldRenderer}>
+        <Form config={config}>
+          <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
+          <button data-testid="button">ok</button>
+        </Form>
+      </FormProvider>
+    )
+
+    const nameField = form.getByTestId('name') as HTMLInputElement
+
+    await act(async () => {
+      await userEvent.type(nameField, 'y')
+    })
+
+    expect(mockBeforeChange.mock.calls).toHaveLength(1)
+    expect(mockBeforeChange.mock.calls[0][0]).toStrictEqual({ ...InitialValue, name: 'Andrey' })
+
+    await waitFor(() => expect(formHook.result.current.config.value.name).toEqual('Andrey Barkanov'))
+
+    expect(formHook.result.current.config.value.name).toEqual('Andrey Barkanov')
+    expect(formHook.result.current.config.errors.age).toEqual('Too young')
   })
 })
