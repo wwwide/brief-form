@@ -65,11 +65,11 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
        * as is (or just reset dirty flag).
        */
       if (manual) {
-        if (value) {
+        if (value && !isEqual(value, oldValue)) {
           setValue(value)
         }
 
-        if (errors) {
+        if (errors && !isEqual(errors, oldErrors)) {
           setErrors(errors)
         }
 
@@ -106,7 +106,9 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
           ? onBeforeChange(value, errors)
           : { value, errors }
 
-        setValue(newValue)
+        if (!isEqual(newValue, oldValue)) {
+          setValue(newValue)
+        }
 
         /**
          * Collect all form fields which were updated.
@@ -151,7 +153,9 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
           ...errorsAfterValidation
         }
 
-        setErrors(finalErrors)
+        if (!isEqual(finalErrors, oldErrors)) {
+          setErrors(finalErrors)
+        }
 
         setDirty(!isEqual(initialValue, newValue))
 

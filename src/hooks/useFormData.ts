@@ -30,8 +30,10 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   const [isDirty, setDirty] = useState(false)
   const [value, setValue] = useState<FormShape>(initialValue)
 
-  const safeInitialErrors =
-    initialErrors || Object.keys(initialValue).reduce((p, c) => ({ ...p, [c]: undefined }), initialValue)
+  const safeInitialErrors = useMemo(
+    () => initialErrors || Object.keys(initialValue).reduce((p, c) => ({ ...p, [c]: undefined }), initialValue),
+    [initialErrors, initialValue]
+  )
 
   const [errors, setErrors] = useState<FormErrorsShape<FormShape>>(safeInitialErrors)
 

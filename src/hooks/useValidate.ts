@@ -1,4 +1,4 @@
-import { RefObject, useCallback } from 'react'
+import { RefObject, useCallback, useMemo } from 'react'
 import { FormErrorsShape, FormValidateFunction, RegisteredField } from '../types'
 
 export type UseValidateValue = {
@@ -62,7 +62,10 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
     [registeredFields, value, updateErrorsRoutine, errors]
   )
 
-  return {
-    validate
-  }
+  return useMemo(
+    () => ({
+      validate
+    }),
+    [validate]
+  )
 }
