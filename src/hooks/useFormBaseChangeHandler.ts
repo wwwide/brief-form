@@ -146,8 +146,6 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
          * If function is called in manual mode
          */
 
-        console.log({ oldErrors, newErrors, errorsAfterValidation })
-
         finalErrors = {
           ...newErrors,
           ...errorsAfterValidation
