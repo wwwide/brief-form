@@ -2,7 +2,7 @@ import React from 'react'
 import TestRenderer from 'react-test-renderer'
 import userEvent from '@testing-library/user-event'
 import { render, renderHook, waitFor } from '@testing-library/react'
-import { FormErrorsShape, FormProvider } from '../src'
+import { BeforeFormChangeHandler, FormErrorsShape, FormProvider } from '../src'
 import { useFormData } from '../src/hooks'
 import { FormInput, FieldRenderer } from '../src/utils'
 
@@ -304,7 +304,7 @@ describe('useFormData works properly', () => {
   })
 
   test('Optional onBeforeChange callback called with proper arguments and transforms value and errors as expected', async () => {
-    const mockBeforeChange = jest.fn((value: MyForm, errors: FormErrorsShape<MyForm>) => {
+    const mockBeforeChange = jest.fn(({ value, errors }) => {
       const valueCopy = { ...value }
       const errorsCopy = { ...errors }
 
@@ -344,7 +344,7 @@ describe('useFormData works properly', () => {
     })
 
     expect(mockBeforeChange.mock.calls).toHaveLength(1)
-    expect(mockBeforeChange.mock.calls[0][0]).toStrictEqual({ ...InitialValue, name: 'Andrey' })
+    expect(mockBeforeChange.mock.calls[0][0].value).toStrictEqual({ ...InitialValue, name: 'Andrey' })
 
     await waitFor(() => expect(formHook.result.current.config.value.name).toEqual('Andrey Barkanov'))
 

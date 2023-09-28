@@ -103,7 +103,7 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
          */
 
         const { value: newValue, errors: newErrors } = onBeforeChange
-          ? onBeforeChange(value, errors)
+          ? onBeforeChange({ oldValue, oldErrors, value, errors })
           : { value, errors }
 
         if (!isEqual(newValue, oldValue)) {
