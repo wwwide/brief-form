@@ -10,4 +10,5 @@ export interface FormInputProps<V, P> {
   onChange: (value: V, error?: string) => void
   error?: string
   required?: boolean
+  className?: string
 }
