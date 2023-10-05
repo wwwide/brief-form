@@ -65,15 +65,19 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
        * as is (or just reset dirty flag).
        */
       if (manual) {
-        if (value && !isEqual(value, oldValue)) {
+        const isValueChanged = !!value && !isEqual(value, oldValue)
+
+        if (isValueChanged) {
           setValue(value)
         }
 
-        if (errors && !isEqual(errors, oldErrors)) {
+        const isErrorsChanged = !!errors && !isEqual(errors, oldErrors)
+
+        if (isErrorsChanged) {
           setErrors(errors)
         }
 
-        if (onFormChanged) {
+        if (onFormChanged && (isValueChanged || isErrorsChanged)) {
           onFormChanged(value || (reset ? initialValue : oldValue), errors || (reset ? initialErrors : oldErrors))
         }
 
