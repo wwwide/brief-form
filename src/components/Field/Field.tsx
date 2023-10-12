@@ -7,7 +7,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
   props: FieldProps<Input, FormShape>
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator, triggerValidatorBy } = props
-  const { crashIfRequiredFieldDoesNotHaveValidator } = useContext(FormConfigContext)
+  const { crashIfRequiredFieldDoesNotHaveValidator, skipFieldsValidationOnUserInput } = useContext(FormConfigContext)
   const ref = useRef<any>()
 
   const {
@@ -75,7 +75,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
 
       onChange({ ...value, [name]: v }, finalErrors)
     },
-    [validator, value, name, safeErrors]
+    [validator, value, name, safeErrors, onChange]
   )
 
   return (

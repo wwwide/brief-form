@@ -3,12 +3,13 @@ import { FormProviderProps } from './FormProviderProps'
 import { FormConfigContext } from '../../context'
 
 export const FormProvider: FC<FormProviderProps> = memo(
-  ({ children, fieldRenderer, crashIfRequiredFieldDoesNotHaveValidator }) => {
+  ({ children, fieldRenderer, crashIfRequiredFieldDoesNotHaveValidator, skipFieldsValidationOnUserInput }) => {
     return (
       <FormConfigContext.Provider
         value={{
-          fieldRenderer: fieldRenderer,
-          crashIfRequiredFieldDoesNotHaveValidator: crashIfRequiredFieldDoesNotHaveValidator || false
+          crashIfRequiredFieldDoesNotHaveValidator,
+          skipFieldsValidationOnUserInput,
+          fieldRenderer: fieldRenderer
         }}
       >
         {children}
