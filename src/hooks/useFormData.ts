@@ -1,4 +1,5 @@
-import { useCallback, useState, useRef, useMemo } from 'react'
+import { useCallback, useState, useRef, useMemo, useContext } from 'react'
+import { FormConfigContext } from '../context'
 import {
   FormErrorsShape,
   RegisteredField,
@@ -19,12 +20,14 @@ export type UseFormDataOpts<FormShape extends { [key: string]: any }> = {
   initialErrors?: FormErrorsShape<FormShape>
   onBeforeChange?: BeforeFormChangeHandler<FormShape>
   onFormChanged?: FormChangedHandler<FormShape>
+  skipFieldsValidationOnUserInput?: boolean
 }
 
 export const useFormData = <FormShape extends { [key: string]: any }>(
   opts: UseFormDataOpts<FormShape>
 ): UseFormDataReturnType<FormShape> => {
-  const { initialValue, initialErrors, onFormChanged, onBeforeChange } = opts
+  const { initialValue, initialErrors, onFormChanged, onBeforeChange, skipFieldsValidationOnUserInput } = opts
+  const context = useContext(FormConfigContext)
   const { Field } = useFieldComponent<FormShape>()
   const [savedInitialvalue, setSavedInitialValue] = useState<FormShape>(initialValue)
   const [isDirty, setDirty] = useState(false)
@@ -52,7 +55,8 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     oldErrors: errors,
     initialErrors: safeInitialErrors,
     initialValue: savedInitialvalue,
-    setInitialValue: setSavedInitialValue
+    setInitialValue: setSavedInitialValue,
+    skipFieldsValidationOnUserInput: skipFieldsValidationOnUserInput || context.skipFieldsValidationOnUserInput
   })
 
   const set: FormSetValueFunction<FormShape> = useCallback(

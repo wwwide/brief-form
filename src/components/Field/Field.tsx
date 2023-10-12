@@ -65,7 +65,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
 
   const onFormInputChange = useCallback(
     (v: $ElementProps<Input>['value'], e?: string) => {
-      const validatorError = validator ? validator(v, value) : undefined
+      const validatorError = validator && !skipFieldsValidationOnUserInput ? validator(v, value) : undefined
       const finalError = validatorError || e || ''
       const finalErrors = { ...safeErrors, [name]: finalError }
 
@@ -75,15 +75,15 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
 
       onChange({ ...value, [name]: v }, finalErrors)
     },
-    [validator, value, name, safeErrors, onChange]
+    [validator, value, name, safeErrors, onChange, skipFieldsValidationOnUserInput]
   )
 
   return (
     <FR error={error || errors[name]} required={required} label={label} name={String(name)} containerRef={ref}>
       <Input
-        opts={inputProps as unknown as $ElementProps<Input>['opts']}
+        opts={inputProps}
         required={required}
-        value={value[name] as unknown as $ElementProps<Input>['value']}
+        value={value[name]}
         label={label}
         error={safeErrors[name]}
         onChange={onFormInputChange}

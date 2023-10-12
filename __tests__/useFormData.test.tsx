@@ -351,4 +351,45 @@ describe('useFormData works properly', () => {
     expect(formHook.result.current.config.value.name).toEqual('Andrey Barkanov')
     expect(formHook.result.current.config.errors.age).toEqual('Too young')
   })
+
+  test('skipFieldsValidationOnUserInput option works as expected', async () => {
+    const formHook = renderHook(() =>
+      useFormData<MyForm>({
+        initialValue: InitialValue,
+        initialErrors: InitialErrors
+      })
+    )
+
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
+
+    const { Form, Field, config } = formHook.result.current
+
+    const nameValidator = (name: string) => {
+      if (name === 'Andrey') {
+        return ' Too famous!'
+      }
+      return undefined
+    }
+
+    const form = render(
+      <FormProvider
+        crashIfRequiredFieldDoesNotHaveValidator
+        skipFieldsValidationOnUserInput
+        fieldRenderer={FieldRenderer}
+      >
+        <Form config={config}>
+          <Field name="name" label="Name" input={FormInput} validator={nameValidator} inputProps={{ testId: 'name' }} />
+          <button data-testid="button">ok</button>
+        </Form>
+      </FormProvider>
+    )
+
+    const nameField = form.getByTestId('name') as HTMLInputElement
+
+    await act(async () => {
+      await userEvent.type(nameField, 'y')
+    })
+
+    expect(formHook.result.current.config.errors.name).toEqual(undefined)
+  })
 })

@@ -20,6 +20,7 @@ export type UseFormBaseChangeHandlerOpts<FormShape> = {
   registeredFields: MutableRefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>
   onFormChanged?: FormChangedHandler<FormShape>
   onBeforeChange?: BeforeFormChangeHandler<FormShape>
+  skipFieldsValidationOnUserInput?: boolean
 }
 
 export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any }>(
@@ -36,7 +37,8 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
     initialValue,
     initialErrors,
     onFormChanged,
-    onBeforeChange
+    onBeforeChange,
+    skipFieldsValidationOnUserInput
   } = opts
 
   return useCallback(
@@ -138,7 +140,7 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
             ...p,
             [c]: (() => {
               const validator = registeredFields.current[c].validator
-              if (validator) {
+              if (validator && !skipFieldsValidationOnUserInput) {
                 return validator(newValue[c], newValue)
               }
               return newErrors[c]
@@ -179,7 +181,8 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
       initialValue,
       initialErrors,
       onFormChanged,
-      onBeforeChange
+      onBeforeChange,
+      skipFieldsValidationOnUserInput
     ]
   )
 }
