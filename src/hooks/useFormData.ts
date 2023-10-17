@@ -1,4 +1,5 @@
-import { useCallback, useState, useRef, useMemo, useContext } from 'react'
+import isEqual from 'lodash.isequal'
+import { useCallback, useState, useRef, useMemo, useContext, useEffect } from 'react'
 import { FormConfigContext } from '../context'
 import {
   FormErrorsShape,
@@ -21,15 +22,25 @@ export type UseFormDataOpts<FormShape extends { [key: string]: any }> = {
   onBeforeChange?: BeforeFormChangeHandler<FormShape>
   onFormChanged?: FormChangedHandler<FormShape>
   skipFieldsValidationOnUserInput?: boolean
+  alwaysSyncWithInitialValueAndErrors?: boolean
 }
 
 export const useFormData = <FormShape extends { [key: string]: any }>(
   opts: UseFormDataOpts<FormShape>
 ): UseFormDataReturnType<FormShape> => {
-  const { initialValue, initialErrors, onFormChanged, onBeforeChange, skipFieldsValidationOnUserInput } = opts
+  const {
+    initialValue,
+    initialErrors,
+    onFormChanged,
+    onBeforeChange,
+    skipFieldsValidationOnUserInput,
+    alwaysSyncWithInitialValueAndErrors
+  } = opts
+
   const context = useContext(FormConfigContext)
   const { Field } = useFieldComponent<FormShape>()
-  const [savedInitialvalue, setSavedInitialValue] = useState<FormShape>(initialValue)
+  const [savedInitialValue, setSavedInitialValue] = useState<FormShape>(initialValue)
+
   const [isDirty, setDirty] = useState(false)
   const [value, setValue] = useState<FormShape>(initialValue)
 
@@ -38,7 +49,30 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     [initialErrors, initialValue]
   )
 
+  const [savedInitialErrors, setSavedInitialErrors] = useState<FormErrorsShape<FormShape>>(safeInitialErrors)
   const [errors, setErrors] = useState<FormErrorsShape<FormShape>>(safeInitialErrors)
+
+  useEffect(() => {
+    // Run this code if we want to reset form every time whem initial value, or initial errors updates.
+    if (alwaysSyncWithInitialValueAndErrors || context.alwaysSyncWithInitialValueAndErrors) {
+      // if current value is not equal to initial value and saved initial value is also not
+      // equal to initial value, it means that initial value was changed.
+      // If case if current form value is changed, initial value and saved initial value
+      // would be equal.
+      if (!isEqual(value, initialValue) && !isEqual(initialValue, savedInitialValue)) {
+        setValue(initialValue)
+        setSavedInitialValue(initialValue)
+        setDirty(false)
+      }
+
+      // Same for errors. We want to update it only if hook opts are updated, not when local
+      // form errors are chaged in some way.
+      if (!!initialErrors && !isEqual(errors, initialErrors) && !isEqual(initialErrors, savedInitialErrors)) {
+        setErrors(initialErrors)
+        setSavedInitialErrors(initialErrors)
+      }
+    }
+  }, [initialValue, savedInitialValue, initialErrors, savedInitialErrors, alwaysSyncWithInitialValueAndErrors, context])
 
   const registeredFields = useRef<{ [key in keyof FormShape]: RegisteredField<FormShape> }>(
     Object.keys(value).reduce((p, c) => ({ ...p, [c]: undefined }), value)
@@ -54,7 +88,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
     oldValue: value,
     oldErrors: errors,
     initialErrors: safeInitialErrors,
-    initialValue: savedInitialvalue,
+    initialValue: savedInitialValue,
     setInitialValue: setSavedInitialValue,
     skipFieldsValidationOnUserInput: skipFieldsValidationOnUserInput || context.skipFieldsValidationOnUserInput
   })

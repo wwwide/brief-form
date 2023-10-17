@@ -5,5 +5,6 @@ export interface FormProviderProps {
   fieldRenderer: FC<FormFieldProps<any, any>>
   crashIfRequiredFieldDoesNotHaveValidator?: boolean
   skipFieldsValidationOnUserInput?: boolean
+  alwaysSyncWithInitialValueAndErrors?: boolean
   children?: ReactNode
 }

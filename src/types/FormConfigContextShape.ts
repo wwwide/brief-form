@@ -5,4 +5,5 @@ export type FormConfigContextShape = {
   fieldRenderer: FC<FormFieldProps<any, any>>
   crashIfRequiredFieldDoesNotHaveValidator?: boolean
   skipFieldsValidationOnUserInput?: boolean
+  alwaysSyncWithInitialValueAndErrors?: boolean
 }
