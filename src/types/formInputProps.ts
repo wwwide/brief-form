@@ -10,6 +10,12 @@ export type BaseFormInputProps<V> = {
   error?: string
   required?: boolean
   className?: string
+  name?: string
+  readonly fieldDataId?: {
+    suffix: string
+    value: string
+    render: boolean
+  }
 }
 
 /**

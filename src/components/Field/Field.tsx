@@ -1,4 +1,4 @@
-import React, { ComponentType, useContext, useEffect, useCallback, ReactElement, useRef } from 'react'
+import React, { ComponentType, useContext, useEffect, useCallback, ReactElement, useRef, useMemo } from 'react'
 import { FormContextValue, FormInputProps } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
 import { FieldProps, $InputProps } from './FieldProps'
@@ -9,16 +9,32 @@ export const Field = function <
   FieldOwnProps
 >(props: FieldProps<Input, FormShape, FieldOwnProps>): ReactElement {
   const { name, input, label, error, required, inputProps, fieldProps, validator, triggerValidatorBy } = props
-  const { crashIfRequiredFieldDoesNotHaveValidator, skipFieldsValidationOnUserInput } = useContext(FormConfigContext)
   const ref = useRef<any>()
+
+  const {
+    crashIfRequiredFieldDoesNotHaveValidator,
+    skipFieldsValidationOnUserInput,
+    renderFieldsDataIds,
+    dataIdSuffix
+  } = useContext(FormConfigContext)
 
   const {
     value,
     errors,
     onChange,
     fieldRenderer: FR,
-    registeredFields
+    registeredFields,
+    name: formName
   } = useContext<FormContextValue<FormShape>>(FormContext)
+
+  const dataId = useMemo(
+    () => ({
+      render: !!renderFieldsDataIds,
+      suffix: dataIdSuffix || 'id',
+      value: `${formName}_${String(name)}`
+    }),
+    [renderFieldsDataIds, dataIdSuffix, formName, name]
+  )
 
   const Input: ComponentType<FormInputProps<any, any>> = input
   const safeErrors = errors || {}
@@ -40,6 +56,20 @@ export const Field = function <
       }
     }
   }, [name, validator, ref])
+
+  useEffect(() => {
+    if (ref.current) {
+      if (dataId.render) {
+        const id = ref.current.getAttribute(`data-${dataIdSuffix}`)
+
+        if (id !== dataId.value) {
+          throw new Error(
+            `"data-${dataId.suffix}"="${dataId.value}" attribute is expected in the Field, but not found.`
+          )
+        }
+      }
+    }
+  }, [dataId])
 
   if ((triggerValidatorBy || []).indexOf(name) !== -1) {
     throw new Error('Field cannot contain itself in "triggerValidatorBy" array.')
@@ -89,14 +119,17 @@ export const Field = function <
       containerRef={ref}
       inputProps={inputProps}
       fieldProps={fieldProps}
+      dataId={dataId}
     >
       <Input
         {...inputProps}
         required={required}
         value={value[name]}
         label={label}
+        name={name}
         error={safeErrors[name]}
         onChange={onFormInputChange}
+        fieldDataId={dataId}
       />
     </FR>
   )

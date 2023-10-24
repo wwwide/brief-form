@@ -6,5 +6,7 @@ export interface FormProviderProps {
   crashIfRequiredFieldDoesNotHaveValidator?: boolean
   skipFieldsValidationOnUserInput?: boolean
   alwaysSyncWithInitialValueAndErrors?: boolean
+  renderFieldsDataIds?: boolean
+  dataIdSuffix?: string
   children?: ReactNode
 }

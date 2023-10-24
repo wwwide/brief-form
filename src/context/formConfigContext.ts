@@ -8,5 +8,7 @@ function fieldStub() {
 export const FormConfigContext = createContext<FormConfigContextShape>({
   fieldRenderer: fieldStub,
   crashIfRequiredFieldDoesNotHaveValidator: false,
-  skipFieldsValidationOnUserInput: false
+  skipFieldsValidationOnUserInput: false,
+  renderFieldsDataIds: false,
+  dataIdSuffix: 'id'
 })

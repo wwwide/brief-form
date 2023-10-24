@@ -10,5 +10,6 @@ export const FormContext = createContext<FormContextValue<any>>({
   onChange: () => {
     return
   },
-  registeredFields: createRef()
+  registeredFields: createRef(),
+  name: ''
 })

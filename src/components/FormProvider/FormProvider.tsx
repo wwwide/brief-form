@@ -8,7 +8,9 @@ export const FormProvider: FC<FormProviderProps> = memo(
     fieldRenderer,
     crashIfRequiredFieldDoesNotHaveValidator,
     skipFieldsValidationOnUserInput,
-    alwaysSyncWithInitialValueAndErrors
+    alwaysSyncWithInitialValueAndErrors,
+    renderFieldsDataIds,
+    dataIdSuffix
   }) => {
     return (
       <FormConfigContext.Provider
@@ -16,6 +18,8 @@ export const FormProvider: FC<FormProviderProps> = memo(
           crashIfRequiredFieldDoesNotHaveValidator,
           skipFieldsValidationOnUserInput,
           alwaysSyncWithInitialValueAndErrors,
+          renderFieldsDataIds,
+          dataIdSuffix: dataIdSuffix || 'id',
           fieldRenderer: fieldRenderer
         }}
       >

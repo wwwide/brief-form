@@ -60,14 +60,8 @@ describe('useFormData works properly', () => {
 
     render(
       <FormProvider crashIfRequiredFieldDoesNotHaveValidator fieldRenderer={FieldRenderer}>
-        <Form config={config}>
-          <Field
-            name="name"
-            label="Name"
-            input={FormInput}
-            inputProps={{ testId: 'name' }}
-            fieldProps={{ label: false }}
-          />
+        <Form config={config} name="form1">
+          <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
           <Field
             required
             name="age"
@@ -398,5 +392,40 @@ describe('useFormData works properly', () => {
     })
 
     expect(formHook.result.current.config.errors.name).toEqual(undefined)
+  })
+
+  test('Form field renders dataId attribute if this option is enabled', async () => {
+    const formHook = renderHook(() =>
+      useFormData<MyForm>({
+        initialValue: InitialValue,
+        initialErrors: InitialErrors
+      })
+    )
+
+    await waitFor(() => expect(formHook.result.current).toBeTruthy())
+
+    const { Form, Field, config } = formHook.result.current
+
+    render(
+      <FormProvider
+        crashIfRequiredFieldDoesNotHaveValidator
+        skipFieldsValidationOnUserInput
+        renderFieldsDataIds
+        dataIdSuffix="suffix"
+        fieldRenderer={FieldRenderer}
+      >
+        <Form config={config} name="testForm">
+          <div id="testDiv">
+            <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
+          </div>
+
+          <button data-testid="button">ok</button>
+        </Form>
+      </FormProvider>
+    )
+
+    const element = document.querySelector('#testDiv div[data-suffix="testForm_name"]')
+
+    expect(element).toBeTruthy()
   })
 })

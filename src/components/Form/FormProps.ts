@@ -5,4 +5,5 @@ export interface FormProps<FormShape> {
   config: FormConfig<FormShape>
   fieldRenderer?: FC<FieldRendererProps<any, any, any>>
   children?: any
+  name?: string
 }

@@ -8,10 +8,17 @@ type FieldRendererOpts = {
 export const FieldRenderer = function <ValueType, InputProps>(
   props: FieldRendererProps<ValueType, InputProps, FieldRendererOpts>
 ): ReactElement {
-  const { label, required, error, children } = props
+  const { label, required, error, children, dataId, containerRef } = props
+  const { suffix, value, render } = dataId
+
+  const dataAttr: any = {}
+
+  if (render) {
+    dataAttr[`data-${suffix}`] = value
+  }
 
   return (
-    <div style={{ marginBottom: '20px' }}>
+    <div style={{ marginBottom: '20px' }} {...dataAttr} ref={containerRef}>
       {!!label && (
         <div>
           {label}

@@ -6,7 +6,8 @@ export const Form = function <FormShape extends { [key: string]: any }>(props: F
   const {
     config: { value, errors, registeredFields, onChange },
     fieldRenderer,
-    children
+    children,
+    name
   } = props
   const { fieldRenderer: GlobalField } = useContext(FormConfigContext)
 
@@ -21,7 +22,8 @@ export const Form = function <FormShape extends { [key: string]: any }>(props: F
         errors,
         onChange,
         fieldRenderer: fieldRenderer || GlobalField,
-        registeredFields
+        registeredFields,
+        name: name || 'form'
       }}
     >
       {children}

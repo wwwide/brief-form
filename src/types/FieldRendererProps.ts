@@ -12,6 +12,11 @@ import { FormInputProps } from './FormInputProps'
 export type FieldRendererProps<ValueType, InputProps, OwnProps> = {
   children: ReactElement<FormInputProps<ValueType, InputProps>>
   readonly name: string
+  readonly dataId: {
+    suffix: string
+    value: string
+    render: boolean
+  }
   containerRef: MutableRefObject<any>
   label?: ReactNode
   error?: string
