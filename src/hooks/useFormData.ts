@@ -25,9 +25,9 @@ export type UseFormDataOpts<FormShape extends { [key: string]: any }> = {
   alwaysSyncWithInitialValueAndErrors?: boolean
 }
 
-export const useFormData = <FormShape extends { [key: string]: any }>(
+export const useFormData = <FormShape extends { [key: string]: any }, FieldOwnOpts = unknown>(
   opts: UseFormDataOpts<FormShape>
-): UseFormDataReturnType<FormShape> => {
+): UseFormDataReturnType<FormShape, FieldOwnOpts> => {
   const {
     initialValue,
     initialErrors,
@@ -38,7 +38,7 @@ export const useFormData = <FormShape extends { [key: string]: any }>(
   } = opts
 
   const context = useContext(FormConfigContext)
-  const { Field } = useFieldComponent<FormShape>()
+  const { Field } = useFieldComponent<FormShape, FieldOwnOpts>()
   const [savedInitialValue, setSavedInitialValue] = useState<FormShape>(initialValue)
 
   const [isDirty, setDirty] = useState(false)

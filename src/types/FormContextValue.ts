@@ -14,6 +14,6 @@ export type FormContextValue<FormShape extends object> = {
   value: FormShape
   errors: FormErrorsShape<FormShape>
   onChange: (value: FormShape, errors: FormErrorsShape<FormShape>) => void
-  fieldRenderer: FC<FieldRendererProps<any, any>>
+  fieldRenderer: FC<FieldRendererProps<any, any, any>>
   registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>
 }

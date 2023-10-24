@@ -50,7 +50,9 @@ describe('useFormData works properly', () => {
   })
 
   test('Check initial data returned by hook with rendered form', async () => {
-    const formHook = renderHook(() => useFormData<MyForm>({ initialValue: InitialValue, initialErrors: InitialErrors }))
+    const formHook = renderHook(() =>
+      useFormData<MyForm, { label: boolean }>({ initialValue: InitialValue, initialErrors: InitialErrors })
+    )
 
     await waitFor(() => expect(formHook.result.current).toBeTruthy())
 
@@ -59,7 +61,13 @@ describe('useFormData works properly', () => {
     render(
       <FormProvider crashIfRequiredFieldDoesNotHaveValidator fieldRenderer={FieldRenderer}>
         <Form config={config}>
-          <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
+          <Field
+            name="name"
+            label="Name"
+            input={FormInput}
+            inputProps={{ testId: 'name' }}
+            fieldProps={{ label: false }}
+          />
           <Field
             required
             name="age"

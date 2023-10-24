@@ -1,10 +1,14 @@
 import React, { ReactElement } from 'react'
 import { FieldRendererProps } from '../types'
 
+type FieldRendererOpts = {
+  labelPosition?: string
+}
+
 export const FieldRenderer = function <ValueType, InputProps>(
-  props: FieldRendererProps<ValueType, InputProps>
+  props: FieldRendererProps<ValueType, InputProps, FieldRendererOpts>
 ): ReactElement {
-  const { label, required, error, children, ...rest } = props
+  const { label, required, error, children } = props
 
   return (
     <div style={{ marginBottom: '20px' }}>

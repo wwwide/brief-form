@@ -3,10 +3,12 @@ import { FormContextValue, FormInputProps } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
 import { FieldProps, $InputProps } from './FieldProps'
 
-export const Field = function <FormShape extends object, Input extends ComponentType<FormInputProps<any, any>>>(
-  props: FieldProps<Input, FormShape>
-): ReactElement {
-  const { name, input, label, error, required, inputProps, validator, triggerValidatorBy } = props
+export const Field = function <
+  FormShape extends object,
+  Input extends ComponentType<FormInputProps<any, any>>,
+  FieldOwnProps
+>(props: FieldProps<Input, FormShape, FieldOwnProps>): ReactElement {
+  const { name, input, label, error, required, inputProps, fieldProps, validator, triggerValidatorBy } = props
   const { crashIfRequiredFieldDoesNotHaveValidator, skipFieldsValidationOnUserInput } = useContext(FormConfigContext)
   const ref = useRef<any>()
 
@@ -86,6 +88,7 @@ export const Field = function <FormShape extends object, Input extends Component
       name={String(name)}
       containerRef={ref}
       inputProps={inputProps}
+      fieldProps={fieldProps}
     >
       <Input
         {...inputProps}
