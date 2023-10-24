@@ -1,9 +1,9 @@
 import React, { ComponentType, useContext, useEffect, useCallback, ReactElement, useRef } from 'react'
 import { FormContextValue, FormInputProps } from '../../types'
 import { FormContext, FormConfigContext } from '../../context'
-import { FieldProps, $ElementProps } from './FieldProps'
+import { FieldProps, $InputProps } from './FieldProps'
 
-export const Field = function <FormShape, Input extends ComponentType<FormInputProps<any, any>>>(
+export const Field = function <FormShape extends object, Input extends ComponentType<FormInputProps<any, any>>>(
   props: FieldProps<Input, FormShape>
 ): ReactElement {
   const { name, input, label, error, required, inputProps, validator, triggerValidatorBy } = props
@@ -18,7 +18,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
     registeredFields
   } = useContext<FormContextValue<FormShape>>(FormContext)
 
-  const Input: any = input
+  const Input: ComponentType<FormInputProps<any, any>> = input
   const safeErrors = errors || {}
 
   useEffect(() => {
@@ -64,7 +64,7 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
   }
 
   const onFormInputChange = useCallback(
-    (v: $ElementProps<Input>['value'], e?: string) => {
+    (v: $InputProps<Input>['value'], e?: string) => {
       const validatorError = validator && !skipFieldsValidationOnUserInput ? validator(v, value) : undefined
       const finalError = validatorError || e || ''
       const finalErrors = { ...safeErrors, [name]: finalError }
@@ -79,9 +79,16 @@ export const Field = function <FormShape, Input extends ComponentType<FormInputP
   )
 
   return (
-    <FR error={error || errors[name]} required={required} label={label} name={String(name)} containerRef={ref}>
+    <FR
+      error={error || errors[name]}
+      required={required}
+      label={label}
+      name={String(name)}
+      containerRef={ref}
+      inputProps={inputProps}
+    >
       <Input
-        opts={inputProps}
+        {...inputProps}
         required={required}
         value={value[name]}
         label={label}

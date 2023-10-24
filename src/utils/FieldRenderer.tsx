@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react'
-import { FormFieldProps } from '../types'
+import { FieldRendererProps } from '../types'
 
 export const FieldRenderer = function <ValueType, InputProps>(
-  props: FormFieldProps<ValueType, InputProps>
+  props: FieldRendererProps<ValueType, InputProps>
 ): ReactElement {
-  const { label, required, error, children } = props
+  const { label, required, error, children, ...rest } = props
 
   return (
     <div style={{ marginBottom: '20px' }}>

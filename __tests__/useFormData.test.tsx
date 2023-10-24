@@ -59,7 +59,6 @@ describe('useFormData works properly', () => {
     render(
       <FormProvider crashIfRequiredFieldDoesNotHaveValidator fieldRenderer={FieldRenderer}>
         <Form config={config}>
-          <input data-testid="iii" defaultValue="18" />
           <Field name="name" label="Name" input={FormInput} inputProps={{ testId: 'name' }} />
           <Field
             required
@@ -364,7 +363,7 @@ describe('useFormData works properly', () => {
 
     const { Form, Field, config } = formHook.result.current
 
-    const nameValidator = (name: string) => {
+    const nameValidator = (name?: string) => {
       if (name === 'Andrey') {
         return ' Too famous!'
       }

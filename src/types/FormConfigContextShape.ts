@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { FormFieldProps } from '.'
+import { FieldRendererProps } from './FieldRendererProps'
 
 export type FormConfigContextShape = {
-  fieldRenderer: FC<FormFieldProps<any, any>>
+  fieldRenderer: FC<FieldRendererProps<any, any>>
   crashIfRequiredFieldDoesNotHaveValidator?: boolean
   skipFieldsValidationOnUserInput?: boolean
   alwaysSyncWithInitialValueAndErrors?: boolean

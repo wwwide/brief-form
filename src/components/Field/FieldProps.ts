@@ -1,12 +1,7 @@
 import { ReactNode, ComponentType } from 'react'
-import { FormInputProps } from '../../types'
+import { FormInputProps, BaseFormInputProps } from '../../types'
 
-export type $ElementProps<T> = T extends ComponentType<infer Props>
-  ? // eslint-disable-next-line
-    Props extends object
-    ? Props
-    : never
-  : never
+export type $InputProps<T> = T extends ComponentType<infer Props> ? Props : never
 
 export interface FieldProps<Input extends ComponentType<FormInputProps<any, any>>, FormShape> {
   name: keyof FormShape
@@ -14,7 +9,7 @@ export interface FieldProps<Input extends ComponentType<FormInputProps<any, any>
   error?: string
   label?: ReactNode
   input: Input
-  validator?: (v: $ElementProps<Input>['value'], f: FormShape) => string | undefined
-  inputProps: $ElementProps<Input>['opts']
+  validator?: (v: $InputProps<Input>['value'], f: FormShape) => string | undefined
+  inputProps: Omit<$InputProps<Input>, keyof BaseFormInputProps<any>>
   triggerValidatorBy?: (keyof FormShape)[]
 }

@@ -1,8 +1,8 @@
 import { FC, ReactNode } from 'react'
-import { FormFieldProps } from '../../types'
+import { FieldRendererProps } from '../../types'
 
 export interface FormProviderProps {
-  fieldRenderer: FC<FormFieldProps<any, any>>
+  fieldRenderer: FC<FieldRendererProps<any, any>>
   crashIfRequiredFieldDoesNotHaveValidator?: boolean
   skipFieldsValidationOnUserInput?: boolean
   alwaysSyncWithInitialValueAndErrors?: boolean

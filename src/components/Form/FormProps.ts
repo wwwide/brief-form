@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { FormConfig, FormFieldProps } from '../../types'
+import { FormConfig, FieldRendererProps } from '../../types'
 
 export interface FormProps<FormShape> {
   config: FormConfig<FormShape>
-  fieldRenderer?: FC<FormFieldProps<any, any>>
+  fieldRenderer?: FC<FieldRendererProps<any, any>>
   children?: any
 }
