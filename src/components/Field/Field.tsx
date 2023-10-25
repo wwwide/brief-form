@@ -122,14 +122,12 @@ export const Field = function <
       dataId={dataId}
     >
       <Input
-        {...inputProps}
         required={required}
         value={value[name]}
-        label={label}
-        name={name}
         error={safeErrors[name]}
         onChange={onFormInputChange}
         fieldDataId={dataId}
+        {...inputProps}
       />
     </FR>
   )

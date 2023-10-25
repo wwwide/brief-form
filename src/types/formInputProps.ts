@@ -1,16 +1,11 @@
-import { ReactNode } from 'react'
-
 /**
  * Base form input props.
  */
 export type BaseFormInputProps<V> = {
   value?: V
-  label?: ReactNode
   onChange?: (value: V, error?: string) => void
   error?: string
   required?: boolean
-  className?: string
-  name?: string
   readonly fieldDataId?: {
     suffix: string
     value: string
