@@ -6,7 +6,7 @@ import { FormInputProps } from './FormInputProps'
 import { FormProps } from '../components/Form'
 import { FieldProps } from '../components/Field'
 
-export type UseFormDataReturnType<FormShape, FieldOpts> = {
+export type UseFormDataReturnType<FormShape, FieldOpts = unknown> = {
   config: FormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
