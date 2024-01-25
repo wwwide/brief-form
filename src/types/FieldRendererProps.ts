@@ -1,5 +1,5 @@
 import { ReactNode, ReactElement, MutableRefObject } from 'react'
-import { FormInputProps } from './formInputProps'
+import { FormInputProps } from './FormInputProps'
 
 /**
  * Props type which should be implemented by UI field component

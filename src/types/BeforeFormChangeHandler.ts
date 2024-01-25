@@ -1,4 +1,4 @@
-import { FormErrorsShape } from './formErrorsShape'
+import { FormErrorsShape } from './FormErrorsShape'
 
 export type BeforeFormChangeHandlerArgs<FormShape> = {
   value: FormShape

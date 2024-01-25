@@ -2,7 +2,7 @@ import { ComponentType, ReactElement } from 'react'
 import { FormConfig } from './FormConfig'
 import { FormSetValueFunction } from './FormSetValueFunction'
 import { FormValidateFunction } from './FormValidateFunction'
-import { FormInputProps } from './formInputProps'
+import { FormInputProps } from './FormInputProps'
 import { FormProps } from '../components/Form'
 import { FieldProps } from '../components/Field'
 

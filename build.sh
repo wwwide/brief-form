@@ -1,6 +1,6 @@
 npm run lint
 rm -rf ./dist
-./node_modules/typescript/bin/tsc
+./node_modules/typescript/bin/tsc --build
 NODE_ENV=production ts-node ./esbuild/build.ts
 rm -rf ./dist/esbuild
 rm -rf ./dist/__tests__
