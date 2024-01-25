@@ -1,4 +1,4 @@
-import { FormErrorsShape } from './FormErrorsShape'
+import { FormErrorsShape } from './formErrorsShape'
 
 export type FormValidateFunctionReturnValue<FormShape> = {
   valid: boolean

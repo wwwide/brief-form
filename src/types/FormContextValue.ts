@@ -1,5 +1,5 @@
 import { FC, RefObject } from 'react'
-import { FormErrorsShape } from './FormErrorsShape'
+import { FormErrorsShape } from './formErrorsShape'
 import { RegisteredField, FieldRendererProps } from '.'
 
 /**
