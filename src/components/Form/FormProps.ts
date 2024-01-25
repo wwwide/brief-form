@@ -6,4 +6,5 @@ export interface FormProps<FormShape> {
   fieldRenderer?: FC<FieldRendererProps<any, any, any>>
   children?: any
   name?: string
+  disabled?: boolean
 }

@@ -11,5 +11,6 @@ export const FormContext = createContext<FormContextValue<any>>({
     return
   },
   registeredFields: createRef(),
-  name: ''
+  name: '',
+  disabled: undefined
 })

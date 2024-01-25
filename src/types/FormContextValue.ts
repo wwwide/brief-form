@@ -18,4 +18,5 @@ export type FormContextValue<FormShape extends object> = {
   fieldRenderer: FC<FieldRendererProps<any, any, any>>
   registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>
   name: string
+  disabled?: boolean
 }

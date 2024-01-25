@@ -9,6 +9,7 @@ export type BaseFormInputProps<V> = {
   error?: string
   label?: ReactNode
   required?: boolean
+  disabled?: boolean
   readonly fieldDataId?: {
     suffix: string
     value: string

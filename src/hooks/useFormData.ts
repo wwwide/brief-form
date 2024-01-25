@@ -40,7 +40,6 @@ export const useFormData = <FormShape extends { [key: string]: any }, FieldOwnOp
   const context = useContext(FormConfigContext)
   const { Field } = useFieldComponent<FormShape, FieldOwnOpts>()
   const [savedInitialValue, setSavedInitialValue] = useState<FormShape>(initialValue)
-
   const [isDirty, setDirty] = useState(false)
   const [value, setValue] = useState<FormShape>(initialValue)
 
