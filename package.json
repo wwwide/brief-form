@@ -1,6 +1,6 @@
 {
   "name": "brief-form",
-  "version": "5.1.5",
+  "version": "5.1.6",
   "main": "./dist/index.js",
   "scripts": {
     "lint": "TIMING=1 ./node_modules/eslint/bin/eslint.js --max-warnings=0 ./src/index.ts",

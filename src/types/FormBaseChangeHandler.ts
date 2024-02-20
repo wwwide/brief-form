@@ -5,6 +5,7 @@ export type FormBaseChangeHandlerOpts<FormShape> = {
   errors?: FormErrorsShape<FormShape>
   reset?: boolean
   manual?: boolean
+  dirty?: boolean
 }
 
 export type FormBaseChangeHandler<FormShape> = (opts: FormBaseChangeHandlerOpts<FormShape>) => void

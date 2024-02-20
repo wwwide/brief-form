@@ -42,14 +42,14 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
   } = opts
 
   return useCallback(
-    ({ value, errors, reset, manual }) => {
+    ({ value, errors, reset, manual, dirty }) => {
       let finalErrors: FormErrorsShape<FormShape> = oldErrors
 
       /**
        * Check if this function call makes sense.
        */
 
-      if (!value && !errors && !reset) {
+      if (!value && !errors && !reset && typeof dirty === 'undefined') {
         return
       }
 
@@ -89,7 +89,7 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
           setErrors(errors || initialErrors)
         }
 
-        setDirty(reset ? false : !isEqual(initialValue, value))
+        setDirty(typeof dirty === 'undefined' ? (reset ? false : !isEqual(initialValue, value)) : dirty)
       } else {
         /**
          * Function is called due to user input, so onBeforeFormChange and dependent
