@@ -21,7 +21,7 @@ export const Field = function <
   const {
     value,
     errors,
-    disabled,
+    disabled: formDisabled,
     onChange,
     fieldRenderer: FR,
     registeredFields,
@@ -123,14 +123,14 @@ export const Field = function <
       dataId={dataId}
     >
       <Input
+        {...inputProps}
         required={required}
         label={label}
         value={value[name]}
         error={safeErrors[name]}
         onChange={onFormInputChange}
         fieldDataId={renderFieldsDataIds ? dataId : undefined}
-        {...inputProps}
-        disabled={disabled}
+        disabled={formDisabled || inputProps?.disabled}
       />
     </FR>
   )
