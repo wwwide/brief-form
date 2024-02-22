@@ -123,6 +123,7 @@ export const Field = function <
       dataId={dataId}
     >
       <Input
+        {...inputProps}
         required={required}
         label={label}
         value={value[name]}
@@ -130,7 +131,6 @@ export const Field = function <
         onChange={onFormInputChange}
         fieldDataId={renderFieldsDataIds ? dataId : undefined}
         disabled={formDisabled || inputProps?.disabled}
-        {...inputProps}
       />
     </FR>
   )
