@@ -80,7 +80,7 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
         }
 
         if (onFormChanged && (isValueChanged || isErrorsChanged)) {
-          onFormChanged(value || (reset ? initialValue : oldValue), errors || (reset ? initialErrors : oldErrors))
+          onFormChanged(value || (reset ? initialValue : oldValue), errors || (reset ? initialErrors : oldErrors), [])
         }
 
         if (reset) {
@@ -166,7 +166,7 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
         setDirty(!isEqual(initialValue, newValue))
 
         if (onFormChanged) {
-          onFormChanged(newValue, finalErrors)
+          onFormChanged(newValue, finalErrors, updatedKeys)
         }
       }
     },
