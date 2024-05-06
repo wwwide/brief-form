@@ -79,10 +79,6 @@ export const useFormBaseChangeHandler = <FormShape extends { [key: string]: any 
           setErrors(errors)
         }
 
-        if (onFormChanged && (isValueChanged || isErrorsChanged)) {
-          onFormChanged(value || (reset ? initialValue : oldValue), errors || (reset ? initialErrors : oldErrors), [])
-        }
-
         if (reset) {
           setInitialValue(value || initialValue)
           setValue(value || initialValue)
