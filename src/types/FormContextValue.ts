@@ -19,4 +19,5 @@ export type FormContextValue<FormShape extends object> = {
   registeredFields: RefObject<{ [key in keyof FormShape]: RegisteredField<FormShape> }>
   name: string
   disabled?: boolean
+  validators?: { [key in keyof FormShape]: (value: FormShape[key]) => string | undefined }
 }

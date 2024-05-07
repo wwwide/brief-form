@@ -7,4 +7,5 @@ export interface FormProps<FormShape> {
   children?: any
   name?: string
   disabled?: boolean
+  validators?: { [key in keyof FormShape]: (value: FormShape[key]) => string | undefined }
 }

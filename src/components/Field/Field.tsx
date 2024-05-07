@@ -21,12 +21,15 @@ export const Field = function <
   const {
     value,
     errors,
-    disabled: formDisabled,
     onChange,
+    validators,
+    disabled: formDisabled,
     fieldRenderer: FR,
     registeredFields,
     name: formName
   } = useContext<FormContextValue<FormShape>>(FormContext)
+
+  const finalValidator = validator || (validators ? validators[name] : undefined)
 
   const dataId = useMemo(
     () => ({
@@ -44,9 +47,9 @@ export const Field = function <
     if (registeredFields.current) {
       if (!registeredFields.current[name]) {
         registeredFields.current[name] = {
-          validator,
           triggerValidatorBy,
-          ref
+          ref,
+          validator: finalValidator
         }
       }
     }
@@ -56,7 +59,7 @@ export const Field = function <
         delete registeredFields.current[name]
       }
     }
-  }, [name, validator, ref])
+  }, [name, finalValidator, ref])
 
   useEffect(() => {
     if (ref.current) {
@@ -84,7 +87,7 @@ export const Field = function <
     throw new Error(`Cannot instantiate form input component for field "${String(name)}"`)
   }
 
-  if (required && !validator) {
+  if (required && !finalValidator) {
     const message = `
       Field "${String(name)}" is required but doesn't have a validator, which should check it
       for "empty" value. Remove "required" property or add a validator.
@@ -98,7 +101,7 @@ export const Field = function <
 
   const onFormInputChange = useCallback(
     (v: $InputProps<Input>['value'], e?: string) => {
-      const validatorError = validator && !skipFieldsValidationOnUserInput ? validator(v, value) : undefined
+      const validatorError = finalValidator && !skipFieldsValidationOnUserInput ? finalValidator(v, value) : undefined
       const finalError = validatorError || e || ''
       const finalErrors = { ...safeErrors, [name]: finalError }
 
@@ -108,7 +111,7 @@ export const Field = function <
 
       onChange({ ...value, [name]: v }, finalErrors)
     },
-    [validator, value, name, safeErrors, onChange, skipFieldsValidationOnUserInput]
+    [finalValidator, value, name, safeErrors, onChange, skipFieldsValidationOnUserInput]
   )
 
   return (
