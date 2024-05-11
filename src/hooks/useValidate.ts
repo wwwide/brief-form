@@ -1,8 +1,8 @@
 import { RefObject, useCallback, useMemo } from 'react'
-import { FormErrorsShape, FormValidateFunction, FormValidateFunctionReturnValue, RegisteredField } from '../types'
+import { FormErrorsShape, FormValidateFunction, RegisteredField } from '../types'
 
 export type UseValidateValue<FormShape> = {
-  validate: (withUpdate?: boolean) => FormValidateFunctionReturnValue<FormShape>
+  validate: FormValidateFunction<FormShape>
 }
 
 /**
@@ -39,11 +39,15 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
   updateErrorsRoutine: (errors: FormErrorsShape<FormShape>) => void
 ): UseValidateValue<FormShape> => {
   const validate: FormValidateFunction<FormShape> = useCallback(
-    (withFormUpdate?: boolean) => {
+    (options) => {
+      const updateFields = options?.updateFields || false
+      const finalValue = options?.value || value
+      const finalErrors = options?.errors || errors
+
       // Errors collector
-      const result: FormErrorsShape<FormShape> = Object.keys(value).reduce((p, c) => {
+      const result: FormErrorsShape<FormShape> = Object.keys(finalValue).reduce((p, c) => {
         return { ...p, [c]: '' }
-      }, value)
+      }, finalValue)
 
       if (registeredFields.current) {
         // Go through all registered form fields and validate each field
@@ -53,9 +57,9 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
             ? registeredFields.current[key]
             : null
 
-          const fieldValue = value[key]
-          const validatorError = meta?.validator ? meta.validator(fieldValue, value) : undefined
-          const error = validatorError || errors[key]
+          const fieldValue = finalValue[key]
+          const validatorError = meta?.validator ? meta.validator(fieldValue, finalValue) : undefined
+          const error = validatorError || finalErrors[key]
 
           if (error) {
             result[key as keyof FormShape] = error
@@ -65,11 +69,11 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
         })
       }
 
-      if (withFormUpdate) {
-        updateErrorsRoutine({ ...errors, ...result })
+      if (updateFields) {
+        updateErrorsRoutine({ ...finalErrors, ...result })
       }
 
-      const { valid, validity } = calculateValidity(value, result)
+      const { valid, validity } = calculateValidity(finalValue, result)
 
       return {
         validity,

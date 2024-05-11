@@ -6,4 +6,12 @@ export type FormValidateFunctionReturnValue<FormShape> = {
   errors: FormErrorsShape<FormShape>
 }
 
-export type FormValidateFunction<FormShape> = (withFormUpdate?: boolean) => FormValidateFunctionReturnValue<FormShape>
+export type FormValidateFunctionOptions<FormShape> = {
+  updateFields?: boolean
+  value?: FormShape
+  errors?: FormErrorsShape<FormShape>
+}
+
+export type FormValidateFunction<FormShape> = (
+  options?: FormValidateFunctionOptions<FormShape>
+) => FormValidateFunctionReturnValue<FormShape>
