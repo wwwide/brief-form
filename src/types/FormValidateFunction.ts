@@ -2,6 +2,7 @@ import { FormErrorsShape } from './FormErrorsShape'
 
 export type FormValidateFunctionReturnValue<FormShape> = {
   valid: boolean
+  validity: number
   errors: FormErrorsShape<FormShape>
 }
 

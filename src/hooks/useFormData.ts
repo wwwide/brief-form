@@ -8,7 +8,6 @@ import {
   FormChangeHandler,
   FormSetValueFunction,
   FormChangedHandler,
-  FormValidateFunction,
   UseFormDataReturnType
 } from '../types'
 import { useValidate } from './useValidate'
@@ -117,7 +116,7 @@ export const useFormData = <FormShape extends { [key: string]: any }, FieldOwnOp
       set,
       Field,
       Form,
-      validate: validate as FormValidateFunction<FormShape>,
+      validate,
       config: {
         value,
         errors,

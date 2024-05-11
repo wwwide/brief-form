@@ -1,11 +1,8 @@
 import { RefObject, useCallback, useMemo } from 'react'
-import { FormErrorsShape, FormValidateFunction, RegisteredField } from '../types'
+import { FormErrorsShape, FormValidateFunction, FormValidateFunctionReturnValue, RegisteredField } from '../types'
 
-export type UseValidateValue = {
-  validate: (withUpdate?: boolean) => {
-    valid: boolean
-    errors: { [key: string]: string | undefined }
-  }
+export type UseValidateValue<FormShape> = {
+  validate: (withUpdate?: boolean) => FormValidateFunctionReturnValue<FormShape>
 }
 
 /**
@@ -22,7 +19,7 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
   value: FormShape,
   errors: FormErrorsShape<FormShape>,
   updateErrorsRoutine: (errors: FormErrorsShape<FormShape>) => void
-): UseValidateValue => {
+): UseValidateValue<FormShape> => {
   const validate: FormValidateFunction<FormShape> = useCallback(
     (withFormUpdate?: boolean) => {
       // Errors collector
@@ -54,9 +51,13 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
         updateErrorsRoutine({ ...errors, ...result })
       }
 
+      const entriesCount = Object.values(result).length
+      const entriesCountWithErrors = Object.values(result).filter((v) => !!v).length
+
       return {
         errors: result,
-        valid: !Object.values(result).filter((v) => !!v).length
+        validity: Math.round(((entriesCount - entriesCountWithErrors) / entriesCount) * 100),
+        valid: !entriesCountWithErrors
       }
     },
     [registeredFields, value, updateErrorsRoutine, errors]
