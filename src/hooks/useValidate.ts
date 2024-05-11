@@ -51,7 +51,7 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
         updateErrorsRoutine({ ...errors, ...result })
       }
 
-      const entriesCount = Object.values(result).length
+      const entriesCount = Object.values(value).length
       const entriesCountWithErrors = Object.values(result).filter((v) => !!v).length
 
       return {
