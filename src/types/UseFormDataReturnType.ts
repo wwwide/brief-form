@@ -10,6 +10,7 @@ export type UseFormDataReturnType<FormShape, FieldOpts = unknown> = {
   config: FormConfig<FormShape>
   isDirty: boolean
   isValid: boolean
+  validity: number
   validate: FormValidateFunction<FormShape>
   set: FormSetValueFunction<FormShape>
   Form: <FormShape extends { [key: string]: any }>(props: FormProps<FormShape>) => ReactElement

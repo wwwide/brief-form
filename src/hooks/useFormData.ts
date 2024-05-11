@@ -10,7 +10,7 @@ import {
   FormChangedHandler,
   UseFormDataReturnType
 } from '../types'
-import { useValidate } from './useValidate'
+import { calculateValidity, useValidate } from './useValidate'
 import { useFormBaseChangeHandler } from './useFormBaseChangeHandler'
 import { useFieldComponent } from './useFieldComponent'
 import { Form } from '../components'
@@ -107,16 +107,17 @@ export const useFormData = <FormShape extends { [key: string]: any }, FieldOwnOp
     [baseChangeHandler]
   )
 
-  const isValid = !Object.values(errors).filter((v) => !!v).length
+  const { valid, validity } = calculateValidity(value, errors)
 
   return useMemo(() => {
     return {
       isDirty,
-      isValid,
       set,
       Field,
       Form,
       validate,
+      validity,
+      isValid: valid,
       config: {
         value,
         errors,
@@ -124,5 +125,5 @@ export const useFormData = <FormShape extends { [key: string]: any }, FieldOwnOp
         registeredFields
       }
     }
-  }, [isDirty, isValid, validate, set, Field, Form, value, errors, onChange, registeredFields])
+  }, [isDirty, valid, validity, validate, set, Field, Form, value, errors, onChange, registeredFields])
 }

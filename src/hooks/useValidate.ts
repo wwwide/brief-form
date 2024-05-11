@@ -6,6 +6,24 @@ export type UseValidateValue<FormShape> = {
 }
 
 /**
+ * Check if form is valid and get value in percentage of ita fill.
+ * @param value - form value.
+ * @param errors - form errors.
+ * @returns - "valid" flag and "validity" in percent.
+ */
+export const calculateValidity = <FormShape extends { [key: string]: string | undefined }>(
+  value: FormShape,
+  errors: FormErrorsShape<FormShape>
+) => {
+  const entriesCount = Object.values(value).length
+  const entriesCountWithErrors = Object.values(errors).filter((v) => !!v).length
+  return {
+    validity: Math.round(((entriesCount - entriesCountWithErrors) / entriesCount) * 100),
+    valid: !entriesCountWithErrors
+  }
+}
+
+/**
  * Hook returning validate function. Optionally this function can update
  * form UI during the validation.
  * @param registeredFields - mutable object keeping form fields metadata.
@@ -51,13 +69,12 @@ export const useValidate = <FormShape extends { [key: string]: string | undefine
         updateErrorsRoutine({ ...errors, ...result })
       }
 
-      const entriesCount = Object.values(value).length
-      const entriesCountWithErrors = Object.values(result).filter((v) => !!v).length
+      const { valid, validity } = calculateValidity(value, result)
 
       return {
-        errors: result,
-        validity: Math.round(((entriesCount - entriesCountWithErrors) / entriesCount) * 100),
-        valid: !entriesCountWithErrors
+        validity,
+        valid,
+        errors: result
       }
     },
     [registeredFields, value, updateErrorsRoutine, errors]
